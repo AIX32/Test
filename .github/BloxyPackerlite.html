@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bloxy Packer Lite</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik+Mono+One&display=swap" rel="stylesheet">
+    <style>
+body {
+    font-family: 'Rubik Mono', sans-serif; /* Applying Rubik Mono to body */
+    background-color: #2E2E2E; /* Dark gray background */
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+h1 {
+    font-family: 'Rubik Mono', sans-serif; /* Applying Rubik Mono to the title */
+    font-size: 32px; /* Make the title larger */
+    color: #fff; /* Orange color for the title */
+    font-weight: bold; /* Bold the title */
+    text-transform: uppercase; /* Make the title uppercase */
+}
+
+p {
+    font-family: 'Rubik Mono', sans-serif; /* Applying Rubik Mono to paragraph */
+    font-size: 16px;
+    color: #FFFFFF; /* White color for the text */
+    line-height: 1.6;
+}
+
+.container {
+    background-color: #444444; /* Slightly lighter gray for container */
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 1200px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+.editor {
+    flex: 3;
+    text-align: center;
+}
+
+.color-picker {
+    flex: 1;
+    margin-left: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    background-color: #FF7F00; /* Orange background */
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.color-picker label {
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: white;
+}
+
+button {
+    background: #FF7F00; /* Orange buttons */
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 10px 0;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background: #E67E00; /* Darker orange on hover */
+}
+
+input {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    background-color: #fff;
+    box-shadow: none;
+}
+
+canvas {
+    border: 1px solid #ddd;
+    max-width: 500px;
+    height: auto;
+    margin-top: 20px;
+}
+
+#folderInput {
+    display: none;
+}
+
+.recent-colors {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.recent-colors div {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    cursor: pointer;
+    border: 2px solid #ddd;
+    transition: transform 0.2s ease-in-out;
+}
+
+.recent-colors div:hover {
+    transform: scale(1.1);
+}
+
+.image-preview {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto;
+    max-height: 600px;
+    padding: 10px;
+    background-color: #4E4E4E; /* Slightly darker gray for image preview */
+    border-radius: 10px;
+    margin-right: 20px;
+}
+
+.image-preview img {
+    width: 50px;
+    height: 50px;
+    margin: 5px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border 0.3s;
+}
+
+.image-preview img.selected {
+    border: 2px solid #FF7F00; /* Orange border for selected image */
+}
+
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="image-preview" id="imagePreview"></div>
+        <div class="editor">
+            <h1>Bloxy Packer - Lite</h1>
+            <p>Select a folder of textures to edit and save the edited texture!</p>
+            
+            <button id="selectFolderBtn" onclick="selectFolder()">Select Folder</button>
+            <input type="file" id="folderInput" webkitdirectory directory onchange="handleFolderUpload(event)">
+            
+            <canvas id="imageCanvas"></canvas>
+            
+            <br>
+            <button onclick="prev()">Back</button>
+            <button onclick="next()">Next</button>
+            <button onclick="saveImage()">Save</button>
+            <button onclick="undo()">Undo</button>
+        </div>
+
+        <div class="color-picker">
+            <label for="colorPicker">Choose Color: </label>
+            <input type="color" id="colorPicker" class="colorPicker" onchange="setColor(event)">
+            
+            <div class="recent-colors" id="recentColors"></div>
+        </div>
+    </div>
+
+    <script>
+        let ctx = null;
+        let selectedColor = '#FF0000';
+        let currentImage = null;
+        let textureFiles = [];
+        let currentTextureIndex = 0;
+        let currentFileName = ''; 
+        let recentColors = [];
+        let pixelHistory = [];
+
+        function selectFolder() {
+            document.getElementById('folderInput').click();
+            document.getElementById('selectFolderBtn').style.display = 'none';
+        }
+
+        function handleFolderUpload(event) {
+            textureFiles = Array.from(event.target.files).filter(file => file.type.startsWith('image/'));
+            if (textureFiles.length > 0) {
+                loadImagePreviews(textureFiles);
+                loadImageFromFile(textureFiles[currentTextureIndex]);
+            }
+        }
+
+        function loadImagePreviews(files) {
+            const previewContainer = document.getElementById('imagePreview');
+            previewContainer.innerHTML = '';
+            files.forEach((file, index) => {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    let img = new Image();
+                    img.src = e.target.result;
+                    img.onclick = () => {
+                        currentTextureIndex = index;
+                        loadImageFromFile(file);
+                        updateSelectedPreview();
+                    };
+                    previewContainer.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function updateSelectedPreview() {
+            const previewImages = document.querySelectorAll('#imagePreview img');
+            previewImages.forEach((img, index) => {
+                if (index === currentTextureIndex) {
+                    img.classList.add('selected');
+                } else {
+                    img.classList.remove('selected');
+                }
+            });
+        }
+
+        function loadImageFromFile(file) {
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                let img = new Image();
+                img.src = e.target.result;
+                img.onload = function() {
+                    currentImage = img;
+                    currentFileName = file.name;
+                    loadImageToCanvas(currentImage);
+                    updateSelectedPreview();
+                };
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function loadImageToCanvas(image) {
+            let canvas = document.getElementById('imageCanvas');
+            ctx = canvas.getContext('2d');
+            canvas.width = image.width * 50; 
+            canvas.height = image.height * 50;
+            ctx.imageSmoothingEnabled = false;
+            ctx.drawImage(image, 0, 0, image.width * 50, image.height * 50);
+        }
+
+        function setColor(event) {
+            selectedColor = event.target.value;
+            addToRecentColors(selectedColor); 
+        }
+
+        function addToRecentColors(color) {
+            if (recentColors.length >= 30) {
+                recentColors.shift();
+            }
+            recentColors.push(color);
+            updateRecentColorsDisplay();
+        }
+
+        function updateRecentColorsDisplay() {
+            const recentColorsDiv = document.getElementById('recentColors');
+            recentColorsDiv.innerHTML = '';  
+
+            recentColors.forEach(color => {
+                let colorDiv = document.createElement('div');
+                colorDiv.style.backgroundColor = color;
+                colorDiv.onclick = () => {
+                    selectedColor = color;
+                    document.getElementById('colorPicker').value = color;
+                };
+                recentColorsDiv.appendChild(colorDiv);
+            });
+        }
+
+        document.getElementById('imageCanvas').addEventListener('mousedown', function(event) {
+            if (event.button === 1) {  
+                let canvas = document.getElementById('imageCanvas');
+                let rect = canvas.getBoundingClientRect();
+                let x = Math.floor((event.clientX - rect.left) / 50);
+                let y = Math.floor((event.clientY - rect.top) / 50);
+                let pixelData = ctx.getImageData(x * 50, y * 50, 1, 1).data;
+                selectedColor = `#${Array.from(pixelData).slice(0, 3).map(byte => byte.toString(16).padStart(2, '0')).join('')}`;
+                document.getElementById('colorPicker').value = selectedColor;
+            }
+        });
+
+        document.getElementById('imageCanvas').addEventListener('click', function(event) {
+            if (currentImage) {
+                let canvas = document.getElementById('imageCanvas');
+                let rect = canvas.getBoundingClientRect();
+                let x = Math.floor((event.clientX - rect.left) / 50); 
+                let y = Math.floor((event.clientY - rect.top) / 50);
+
+                let previousColor = ctx.getImageData(x * 50, y * 50, 50, 50);
+                pixelHistory.push({ x, y, previousColor });
+                
+                ctx.fillStyle = selectedColor;
+                ctx.fillRect(x * 50, y * 50, 50, 50);  
+            }
+        });
+
+        function undo() {
+            if (pixelHistory.length > 0) {
+                let { x, y, previousColor } = pixelHistory.pop();
+                ctx.putImageData(previousColor, x * 50, y * 50);
+            }
+        }
+
+        function prev() {
+            if (currentTextureIndex > 0) {
+                currentTextureIndex--;
+                loadImageFromFile(textureFiles[currentTextureIndex]);
+            }
+        }
+
+        function next() {
+            if (currentTextureIndex < textureFiles.length - 1) {
+                currentTextureIndex++;
+                loadImageFromFile(textureFiles[currentTextureIndex]);
+            } else {
+                alert('All textures have been edited!');
+            }
+        }
+
+        function saveImage() {
+            if (currentImage) {
+                let canvas = document.getElementById('imageCanvas');
+                let imageData = canvas.toDataURL('image/png');
+                let img = new Image();
+                img.src = imageData;
+
+                img.onload = function() {
+                    let canvas = document.createElement('canvas');
+                    let ctx = canvas.getContext('2d');
+                    canvas.width = 8;
+                    canvas.height = 8;
+                    ctx.drawImage(img, 0, 0, 8, 8);
+
+                    canvas.toBlob(function(blob) {
+                        if (blob) {
+                            let link = document.createElement('a');
+                            link.href = URL.createObjectURL(blob);
+                            link.download = currentFileName;
+                            link.click();
+                        } else {
+                            alert('Failed to save the image. Please try again.');
+                        }
+                    }, 'image/png');
+                };
+            } else {
+                alert('No image to save.');
+            }
+        }
+    </script>
+</body>
+</html>
