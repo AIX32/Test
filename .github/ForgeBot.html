@@ -4,186 +4,134 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ForgeBot</title>
-    <style>
-/* General body styling */
+</head>
+<style>
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: Arial, sans-serif;
+    background-color: #2e2e2e; /* Dark gray background */
+    color: #f0f0f0; /* Light text color for better contrast */
     margin: 0;
     padding: 0;
-    background-color: #121212; /* Dark background similar to CurseForge */
-    color: #e3e3e3; /* Light text for better contrast */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    overflow-x: hidden; /* Prevent horizontal scrolling */
-    transition: all 0.3s ease;
 }
 
-/* Container with central alignment */
-.container {
-    max-width: 900px;
-    width: 100%;
-    margin: 20px;
-    background-color: #1e1e1e; /* Dark gray container */
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    transition: all 0.3s ease;
-}
-
-.container:hover {
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4); /* Stronger shadow on hover */
-    transform: translateY(-5px); /* Slight lift effect on hover */
-}
-
-.h1 {
-  text-shadow: 0 0 10px #ff7f00, 0 0 20px #ff7f00;
-}
-
-/* Input fields */
-input[type="text"] {
-    width: 100%;
-    padding: 15px;
-    margin: 10px 0;
-    border: 1px solid #444;
+/* Main container */
+div {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #383838; /* Slightly lighter gray for contrast */
     border-radius: 8px;
-    background-color: #2a2a2a; /* Darker background for input field */
-    color: #fff; /* Light text for input */
-    font-size: 16px;
-    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* Enhanced shadow */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Glowing effect when input field is focused */
-input[type="text"]:focus {
-    border-color: #ff7f00; /* Orange focus border */
+div:hover {
+    transform: translateY(-5px); /* Slight hover lift */
+    box-shadow: 0 8px 30px rgba(255, 140, 0, 0.7); /* Glow effect */
+}
+
+/* Heading */
+h1 {
+    font-size: 24px;
+    text-align: center;
+    color: #ff8c00; /* Orange accent */
+    text-shadow: 0 0 8px rgba(255, 140, 0, 0.8); /* Glow effect */
+}
+
+/* Instruction text */
+p {
+    font-size: 16px;
+    margin-bottom: 20px;
+    color: #ccc; /* Softer gray for instructions */
+}
+
+/* Input and Button Container */
+input[type="text"] {
+    width: calc(100% - 20px);
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #555; /* Gray border */
+    border-radius: 4px;
+    margin-bottom: 10px;
     outline: none;
-    background-color: #333; /* Slightly lighter background on focus */
-    box-shadow: 0 0 10px #ff7f00, 0 0 20px #ff7f00; /* Glowing effect */
+    background-color: #4a4a4a; /* Darker input field background */
+    color: #fff; /* White text */
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input[type="text"]:focus {
+    border-color: #ff8c00; /* Orange accent on focus */
+    box-shadow: 0 0 8px rgba(255, 140, 0, 0.8); /* Glow effect */
 }
 
 /* Button styles */
 button {
-    padding: 14px 28px;
-    background-color: #ff7f00; /* Orange background */
-    color: white;
+    display: block;
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #ff8c00; /* Orange accent */
+    color: #fff;
     border: none;
-    border-radius: 10px;
+    border-radius: 4px;
     cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s ease;
-    font-size: 16px;
-    text-transform: uppercase;
+    transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    text-shadow: 0 0 8px rgba(255, 140, 0, 0.8); /* Glow effect */
 }
 
-/* Button hover effects */
 button:hover {
-    background-color: #e67e00; /* Darker orange on hover */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-    transform: scale(1.05); /* Slight scale effect on hover */
+    background-color: #e67e00; /* Slightly darker orange */
+    transform: translateY(-3px); /* Hover lift */
+    box-shadow: 0 6px 15px rgba(255, 140, 0, 0.7); /* Glow effect */
 }
 
-/* Button active effect */
-button:active {
-    background-color: #cc6a00;
-    transform: scale(1); /* Reset scale on button press */
-}
-
-/* Glow effect on special buttons */
-button.glow {
-    text-shadow: 0 0 12px #ff7f00, 0 0 20px #ff7f00, 0 0 30px #ff7f00; /* Stronger glow effect */
-}
-
-/* Response section */
-.response {
-    margin-top: 30px;
+/* Response Box */
+#response {
+    margin-top: 20px;
+    padding: 10px;
     font-size: 16px;
-    color: #ccc;
-    transition: all 0.3s ease;
-}
-
-/* Code block styles */
-pre {
-    background-color: #2a2a2a; /* Dark background for code block */
-    color: #f5f5f5; /* Light text in code block */
-    padding: 20px;
-    border-radius: 8px;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    font-family: 'Courier New', monospace;
-    font-size: 14px;
-    transition: all 0.3s ease;
-}
-
-/* Card styling */
-.card {
-    background-color: #2a2a2a; /* Card background to match the dark gray theme */
-    padding: 20px;
-    border-radius: 10px;
-    margin: 15px 0;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease, box-shadow 0.3s ease, margin-top 0.3s ease;
-}
-
-/* Hover effect on card */
-.card:hover {
-    transform: translateY(-12px); /* Hover effect to lift the card */
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); /* Stronger shadow on hover */
-    margin-top: 10px; /* Floating effect by moving the card upwards */
-}
-
-/* Card header styles */
-.card h3 {
-    color: #ff7f00; /* Orange text for headers */
-    font-size: 20px;
-    margin-bottom: 12px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-}
-
-/* Glowing effect on title hover */
-.card h3:hover {
-    text-shadow: 0 0 12px #ff7f00, 0 0 20px #ff7f00, 0 0 30px #ff7f00; /* Glow effect on hover */
-    color: #ff7f00; /* Glow color */
-}
-
-/* Card paragraph text */
-.card p {
-    color: #ccc;
-    font-size: 14px;
     line-height: 1.5;
+    background-color: #444; /* Dark gray */
+    border-left: 4px solid #ff8c00; /* Orange accent */
+    border-radius: 4px;
+    word-wrap: break-word;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transition: box-shadow 0.3s;
 }
 
-/* Additional responsiveness for smaller screens */
-@media (max-width: 768px) {
-    .container {
-        padding: 20px;
-    }
-
-    input[type="text"], button {
-        font-size: 14px;
-    }
-
-    .card h3 {
-        font-size: 18px;
-    }
-
-    .card p {
-        font-size: 13px;
-    }
+#response:hover {
+    box-shadow: 0 6px 20px rgba(255, 140, 0, 0.6); /* Glow on hover */
 }
-    </style>
-</head>
+
+#response h2 {
+    font-size: 18px;
+    margin: 0 0 10px;
+    color: #ff8c00; /* Orange accent */
+    text-shadow: 0 0 8px rgba(255, 140, 0, 0.8); /* Glow effect */
+}
+
+#response pre {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    color: #f0f0f0;
+    background-color: #333; /* Darker code block background */
+    padding: 10px;
+    border-radius: 4px;
+    overflow-x: auto;
+    box-shadow: 0 0 8px rgba(255, 140, 0, 0.6); /* Subtle glow */
+}
+
+</style>
 <body>
 
-    <div class="container">
+    <div>
         <h1>ForgeBot</h1>
-        <p>Ask a question (e.g., "What is grass?", "How do I get grass?", "What does grass look like?"):</p>
+        <p>Ask a question (e.g., "What is grass?", "How do I get snow?", "What does wood look like?"):</p>
 
         <input type="text" id="query" placeholder="Enter your question">
         <button onclick="searchWiki()">Ask</button>
 
-        <div class="response" id="response"></div>
+        <div id="response"></div>
     </div>
 
     <script>
@@ -245,59 +193,75 @@ pre {
             return sections;
         }
 
-        function searchContent(query, sections, filename) {
+        function searchContent(query, itemName, sections) {
             query = query.toLowerCase();
 
-            // Check if the query matches with the item in the current file
-            if (filename.toLowerCase().includes(query.replace("how do i get", "").trim())) {
-                if (query.includes('how do i get')) {
-                    return sections['obtaining'] || 'No relevant information found in Obtaining.';
-                } else if (query.includes('what is')) {
-                    return sections['overview'] || 'No relevant information found in Overview.';
-                } else if (query.includes('look like') || query.includes('appearance')) {
-                    return sections['appearance'] || 'No relevant information found in Appearance.';
-                } else if (query.includes('use') || query.includes('building') || query.includes('terraforming') || query.includes('farming')) {
-                    return sections['uses'] || 'No relevant information found in Uses.';
-                } else {
-                    return 'Sorry, I couldn\'t understand the question.';
-                }
+            // Match "what is" query to return the overview description
+            if (query.startsWith('what is')) {
+                return sections['overview'] || `No overview information found for ${itemName}.`;
+            } 
+            // Match "how do I get" query to return the obtaining section
+            else if (query.startsWith('how do i get')) {
+                return sections['obtaining'] || `No obtaining information found for ${itemName}.`;
+            } 
+            // Match "what does X look like?" or "appearance" queries
+            else if (query.startsWith('what does') && query.includes('look like')) {
+                return sections['appearance'] || `No appearance information found for ${itemName}.`;
+            } else if (query.includes('appearance')) {
+                return sections['appearance'] || `No appearance information found for ${itemName}.`;
             }
-            return null; // If it's not the correct file, return null.
+            // Match "use" or related queries
+            else if (query.includes('use') || query.includes('building') || query.includes('terraforming') || query.includes('farming')) {
+                return sections['uses'] || `No use information found for ${itemName}.`;
+            }
+
+            return null; // If no section matches
         }
 
         async function searchWiki() {
-            const query = document.getElementById('query').value.trim();
+            const query = document.getElementById('query').value.trim().toLowerCase();
+            const responseDiv = document.getElementById('response');
+            responseDiv.textContent = 'Searching...';
+
             if (!query) {
-                alert('Please enter a question.');
+                responseDiv.textContent = 'Please enter a valid query.';
                 return;
             }
 
             const files = await fetchFilesFromRepo();
-            let found = false;
-            let responseHtml = '';
+            if (files.length === 0) {
+                responseDiv.textContent = 'No files found in the repository.';
+                return;
+            }
+
+            // Extract the item name from the query (e.g., "snow" from "what does snow look like?")
+            const itemNameMatch = query.match(/what is (.+)|how do i get (.+)|what does (.+) look like/);
+            const itemName = itemNameMatch ? itemNameMatch[1] || itemNameMatch[2] || itemNameMatch[3] : null;
+
+            if (!itemName) {
+                responseDiv.textContent = 'Please specify an item in your query.';
+                return;
+            }
 
             for (const file of files) {
-                if (file.type === 'file') {
+                if (file.type === 'file' && file.name.endsWith('.txt')) {
                     const content = await fetchFileContent(file.download_url);
-                    const sections = parseSections(content);
-                    const relevantSection = searchContent(query, sections, file.name);
 
-                    if (relevantSection) {
-                        responseHtml = `
-                            <h2>Answer:</h2>
-                            <pre>${relevantSection}</pre>
-                        `;
-                        found = true;
-                        break;
+                    // Check if the file mentions the item explicitly
+                    if (content.toLowerCase().includes(itemName)) {
+                        const sections = parseSections(content);
+
+                        // Handle specific query types
+                        const result = searchContent(query, itemName, sections);
+                        if (result) {
+                            responseDiv.innerHTML = `<h2>Answer for "${itemName}":</h2><pre>${result}</pre>`;
+                            return;
+                        }
                     }
                 }
             }
 
-            if (!found) {
-                responseHtml = `<p>No information found for "${query}".</p>`;
-            }
-
-            document.getElementById('response').innerHTML = responseHtml;
+            responseDiv.innerHTML = `<p>No information found for "${itemName}".</p>`;
         }
     </script>
 
