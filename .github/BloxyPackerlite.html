@@ -3,183 +3,491 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bloxy Packer Lite</title>
-    <link href="https://fonts.googleapis.com/css2?family=Rubik+Mono+One&display=swap" rel="stylesheet">
+    <title>Bloxy Packer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@heroicons/24/outline/esm/index.js"></script>
     <style>
-body {
-    font-family: 'Rubik Mono', sans-serif; /* Applying Rubik Mono to body */
-    background-color: #2E2E2E; /* Dark gray background */
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: #0f172a;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #e2e8f0;
+        }
+        .container {
+            background: linear-gradient(145deg, #1e293b, #1a2234);
+            padding: 2rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 1400px;
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            gap: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+        }
+        .editor {
+            flex: 3;
+            text-align: center;
+            padding: 1rem;
+        }
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            gap: 1rem;
+        }
+        .logo {
+            width: 50px;
+            height: 50px;
+            filter: drop-shadow(0 0 8px rgba(96, 165, 250, 0.3));
+        }
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .logo-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0;
+            background: linear-gradient(45deg, #60a5fa, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1;
+        }
+        .logo-subtitle {
+            font-size: 0.875rem;
+            color: #94a3b8;
+            margin: 0;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+        }
+        .primary-button {
+            background: linear-gradient(45deg, #3b82f6, #6366f1);
+            padding: 0.75rem 2rem;
+        }
+        .primary-button:hover {
+            background: linear-gradient(45deg, #2563eb, #4f46e5);
+        }
+        .secondary-button {
+            background: #334155;
+        }
+        .secondary-button:hover {
+            background: #475569;
+        }
+        .color-picker {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            background-color: #2d3748;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .color-picker label {
+            font-size: 0.875rem;
+            margin-bottom: 0.75rem;
+            color: #e2e8f0;
+            font-weight: 500;
+        }
+        button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            margin: 0.5rem;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        button:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        input[type="color"] {
+            width: 100%;
+            height: 50px;
+            border-radius: 0.5rem;
+            border: 2px solid #4b5563;
+            margin-bottom: 1rem;
+            background-color: #374151;
+            cursor: pointer;
+        }
+        canvas {
+            border: 2px solid #4b5563;
+            border-radius: 0.5rem;
+            max-width: 500px;
+            height: auto;
+            margin-top: 1.5rem;
+            background-color: #2d3748;
+        }
+        .recent-colors {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+        .recent-colors div {
+            aspect-ratio: 1;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            border: 2px solid #4b5563;
+            transition: all 0.2s ease;
+        }
+        .recent-colors div:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 12px rgba(59, 130, 246, 0.5);
+        }
+        .image-preview {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-y: auto;
+            max-height: 600px;
+            padding: 1rem;
+            background-color: #2d3748;
+            border-radius: 0.75rem;
+            margin-right: 1rem;
+            scrollbar-width: thin;
+            scrollbar-color: #4b5563 #2d3748;
+        }
+        .image-preview::-webkit-scrollbar {
+            width: 6px;
+        }
+        .image-preview::-webkit-scrollbar-track {
+            background: #2d3748;
+        }
+        .image-preview::-webkit-scrollbar-thumb {
+            background-color: #4b5563;
+            border-radius: 3px;
+        }
+        .image-preview img {
+            width: 60px;
+            height: 60px;
+            margin: 0.375rem;
+            cursor: pointer;
+            border: 2px solid #4b5563;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease;
+            background-color: #1e293b;
+        }
+        .image-preview img.selected {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+            transform: scale(1.05);
+        }
+        .image-preview img:hover {
+            transform: scale(1.05);
+        }
 
-h1 {
-    font-family: 'Rubik Mono', sans-serif; /* Applying Rubik Mono to the title */
-    font-size: 32px; /* Make the title larger */
-    color: #fff; /* Orange color for the title */
-    font-weight: bold; /* Bold the title */
-    text-transform: uppercase; /* Make the title uppercase */
-}
+        #splashScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0f172a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease-out;
+        }
 
-p {
-    font-family: 'Rubik Mono', sans-serif; /* Applying Rubik Mono to paragraph */
-    font-size: 16px;
-    color: #FFFFFF; /* White color for the text */
-    line-height: 1.6;
-}
+        .splash-content {
+            text-align: center;
+            animation: fadeIn 1s ease-out;
+            position: relative;
+            padding: 2rem;
+            background: linear-gradient(145deg, #1e293b, #1a2234);
+            border-radius: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
 
-.container {
-    background-color: #444444; /* Slightly lighter gray for container */
-    padding: 40px;
-    border-radius: 15px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    width: 80%;
-    max-width: 1200px;
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-}
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-.editor {
-    flex: 3;
-    text-align: center;
-}
+        .splash-logo {
+            width: 140px;
+            height: 140px;
+            margin-bottom: 2rem;
+            filter: drop-shadow(0 0 20px rgba(96, 165, 250, 0.3));
+        }
 
-.color-picker {
-    flex: 1;
-    margin-left: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    background-color: #FF7F00; /* Orange background */
-    padding: 15px;
-    border-radius: 10px;
-}
+        .splash-blocks {
+            animation: rotate 10s linear infinite;
+            transform-origin: center;
+        }
 
-.color-picker label {
-    font-size: 16px;
-    margin-bottom: 10px;
-    color: white;
-}
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
 
-button {
-    background: #FF7F00; /* Orange buttons */
-    color: white;
-    border: none;
-    padding: 15px 30px;
-    border-radius: 8px;
-    font-size: 16px;
-    cursor: pointer;
-    margin: 10px 0;
-    transition: background 0.3s;
-}
+        #uploadScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0f172a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
 
-button:hover {
-    background: #E67E00; /* Darker orange on hover */
-}
+        .upload-container {
+            background: linear-gradient(145deg, #1e293b, #1a2234);
+            padding: 3rem;
+            border-radius: 1.5rem;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
 
-input {
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    margin-bottom: 10px;
-    background-color: #fff;
-    box-shadow: none;
-}
+        .upload-zone {
+            border: 2px dashed #4b5563;
+            border-radius: 1rem;
+            padding: 3rem 2rem;
+            margin: 2rem 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+        }
 
-canvas {
-    border: 1px solid #ddd;
-    max-width: 500px;
-    height: auto;
-    margin-top: 20px;
-    border-radius: 10px;
-}
+        .upload-zone:hover {
+            border-color: #60a5fa;
+            background: rgba(96, 165, 250, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
 
-#folderInput {
-    display: none;
-}
+        .upload-icon {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 1.5rem;
+            color: #60a5fa;
+            animation: float 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 8px rgba(96, 165, 250, 0.3));
+        }
 
-.recent-colors {
-    display: flex;
-    flex-wrap: wrap;
-    margin-top: 20px;
-}
+        .upload-zone h2 {
+            color: #e2e8f0;
+            margin-bottom: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
 
-.recent-colors div {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin-right: 10px;
-    cursor: pointer;
-    border: 2px solid #ddd;
-    transition: transform 0.2s ease-in-out;
-}
+        .upload-zone p {
+            color: #94a3b8;
+            font-size: 0.875rem;
+            max-width: 80%;
+            margin: 0 auto;
+        }
 
-.recent-colors div:hover {
-    transform: scale(1.1);
-}
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
 
-.image-preview {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    overflow-y: auto;
-    max-height: 600px;
-    padding: 10px;
-    background-color: #4E4E4E; /* Slightly darker gray for image preview */
-    border-radius: 10px;
-    margin-right: 20px;
-}
+        .upload-zone:hover .upload-icon {
+            color: #818cf8;
+            animation: bounce 0.5s ease infinite;
+            filter: drop-shadow(0 0 12px rgba(96, 165, 250, 0.5));
+        }
 
-.image-preview img {
-    width: 50px;
-    height: 50px;
-    margin: 5px;
-    cursor: pointer;
-    border: 2px solid transparent;
-    transition: border 0.3s;
-}
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
 
-.image-preview img.selected {
-    border: 2px solid #FF7F00; /* Orange border for selected image */
-}
+        #mainEditor {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in;
+        }
 
+        .progress-bar {
+            width: 240px;
+            height: 4px;
+            background: rgba(45, 55, 72, 0.5);
+            border-radius: 2px;
+            margin: 2rem auto 0;
+            overflow: hidden;
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #60a5fa, #a855f7, #60a5fa);
+            width: 0%;
+            transition: width 0.3s ease;
+            background-size: 200% 100%;
+            animation: gradientMove 2s linear infinite;
+            box-shadow: 0 0 20px rgba(96, 165, 250, 0.3);
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 100% 0; }
+            100% { background-position: -100% 0; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div id="splashScreen">
+        <div class="splash-content">
+            <svg class="splash-logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g class="splash-blocks">
+                    <rect x="20" y="20" width="25" height="25" rx="4" fill="#60A5FA">
+                        <animate attributeName="transform" values="0 0; 0 -10; 0 0" dur="2s" begin="0s" repeatCount="indefinite"/>
+                        <animate attributeName="fill" values="#60A5FA;#818CF8;#60A5FA" dur="3s" repeatCount="indefinite"/>
+                    </rect>
+                    <rect x="55" y="20" width="25" height="25" rx="4" fill="#818CF8">
+                        <animate attributeName="transform" values="0 0; 0 -10; 0 0" dur="2s" begin="0.5s" repeatCount="indefinite"/>
+                        <animate attributeName="fill" values="#818CF8;#A855F7;#818CF8" dur="3s" begin="1s" repeatCount="indefinite"/>
+                    </rect>
+                    <rect x="20" y="55" width="25" height="25" rx="4" fill="#A855F7">
+                        <animate attributeName="transform" values="0 0; 0 -10; 0 0" dur="2s" begin="1s" repeatCount="indefinite"/>
+                        <animate attributeName="fill" values="#A855F7;#6366F1;#A855F7" dur="3s" begin="0.5s" repeatCount="indefinite"/>
+                    </rect>
+                    <rect x="55" y="55" width="25" height="25" rx="4" fill="#6366F1">
+                        <animate attributeName="transform" values="0 0; 0 -10; 0 0" dur="2s" begin="1.5s" repeatCount="indefinite"/>
+                        <animate attributeName="fill" values="#6366F1;#60A5FA;#6366F1" dur="3s" begin="1.5s" repeatCount="indefinite"/>
+                    </rect>
+                </g>
+            </svg>
+            <h1 class="logo-title">Bloxy Packer</h1>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="uploadScreen">
+        <div class="upload-container">
+            <h1 class="logo-title">Bloxy Packer</h1>
+            <p class="logo-subtitle">Texture Editor & Packer</p>
+            
+            <div class="upload-zone" onclick="selectFolder()">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="upload-icon">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
+                </svg>
+                <h2>Upload Texture Pack</h2>
+                <p>Click to select or drag and drop your texture pack folder</p>
+            </div>
+            
+            <input type="file" id="folderInput" webkitdirectory directory onchange="handleFolderUpload(event)" style="display:none">
+        </div>
+    </div>
+
+    <div id="mainEditor" class="container">
         <div class="image-preview" id="imagePreview"></div>
         <div class="editor">
-            <h1>Bloxy Packer - Lite</h1>
-            <p>Select a folder of textures to edit and save the edited texture!</p>
+            <div class="logo-container">
+                <svg class="logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="20" y="20" width="25" height="25" rx="4" fill="#60A5FA"/>
+                    <rect x="55" y="20" width="25" height="25" rx="4" fill="#818CF8"/>
+                    <rect x="20" y="55" width="25" height="25" rx="4" fill="#A855F7"/>
+                    <rect x="55" y="55" width="25" height="25" rx="4" fill="#6366F1"/>
+                    <path d="M45 45L55 55M45 55L55 45" stroke="#E2E8F0" stroke-width="3" stroke-linecap="round"/>
+                </svg>
+                <div class="logo-text">
+                    <h1 class="logo-title">Bloxy Packer</h1>
+                    <p class="logo-subtitle">Texture Editor & Packer</p>
+                </div>
+            </div>
             
-            <button id="selectFolderBtn" onclick="selectFolder()">Select Folder</button>
-            <input type="file" id="folderInput" webkitdirectory directory onchange="handleFolderUpload(event)">
+            <button id="selectFolderBtn" class="primary-button" onclick="selectFolder()">
+                <svg style="width:16px;height:16px;margin-right:8px;vertical-align:middle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 20h16a2 2 0 002-2V8a2 2 0 00-2-2h-7.93a2 2 0 01-1.66-.9l-.82-1.2A2 2 0 0012.07 3H4a2 2 0 00-2 2v13c0 1.1.9 2 2 2z"/>
+                </svg>
+                Select Folder
+            </button>
+            <input type="file" id="folderInput" webkitdirectory directory onchange="handleFolderUpload(event)" style="display:none">
             
             <canvas id="imageCanvas"></canvas>
             
-            <br>
-            <button onclick="prev()">Back</button>
-            <button onclick="next()">Next</button>
-            <button onclick="saveImage()">Save</button>
-            <button onclick="undo()">Undo</button>
+            <div class="action-buttons">
+                <button onclick="prev()" class="secondary-button">
+                    <svg style="width:16px;height:16px;margin-right:4px;vertical-align:middle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M15 19l-7-7 7-7"/>
+                    </svg>
+                    Back
+                </button>
+                <button onclick="next()" class="secondary-button">
+                    Next
+                    <svg style="width:16px;height:16px;margin-left:4px;vertical-align:middle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 5l7 7-7 7"/>
+                    </svg>
+                </button>
+                <button onclick="saveImage()" class="primary-button">
+                    <svg style="width:16px;height:16px;margin-right:8px;vertical-align:middle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/>
+                    </svg>
+                    Save
+                </button>
+                <button onclick="undo()" class="secondary-button">
+                    <svg style="width:16px;height:16px;margin-right:4px;vertical-align:middle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/>
+                    </svg>
+                    Undo
+                </button>
+            </div>
         </div>
 
         <div class="color-picker">
-            <label for="colorPicker">Choose Color: </label>
+            <label for="colorPicker">Choose Color</label>
             <input type="color" id="colorPicker" class="colorPicker" onchange="setColor(event)">
-            
             <div class="recent-colors" id="recentColors"></div>
         </div>
     </div>
 
     <script>
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const progressFill = document.querySelector('.progress-fill');
+                progressFill.style.width = '100%';
+                
+                setTimeout(() => {
+                    document.getElementById('splashScreen').style.opacity = '0';
+                    setTimeout(() => {
+                        document.getElementById('splashScreen').style.display = 'none';
+                    }, 500);
+                }, 1000);
+            }, 500);
+        });
+
         let ctx = null;
         let selectedColor = '#FF0000';
         let currentImage = null;
@@ -197,6 +505,13 @@ canvas {
         function handleFolderUpload(event) {
             textureFiles = Array.from(event.target.files).filter(file => file.type.startsWith('image/'));
             if (textureFiles.length > 0) {
+                document.getElementById('uploadScreen').style.display = 'none';
+                const mainEditor = document.getElementById('mainEditor');
+                mainEditor.style.display = 'flex';
+                setTimeout(() => {
+                    mainEditor.style.opacity = '1';
+                }, 100);
+                
                 loadImagePreviews(textureFiles);
                 loadImageFromFile(textureFiles[currentTextureIndex]);
             }
@@ -362,6 +677,44 @@ canvas {
             } else {
                 alert('No image to save.');
             }
+        }
+
+        const uploadZone = document.querySelector('.upload-zone');
+        
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            uploadZone.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            uploadZone.addEventListener(eventName, highlight, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            uploadZone.addEventListener(eventName, unhighlight, false);
+        });
+
+        function highlight(e) {
+            uploadZone.style.borderColor = '#60a5fa';
+            uploadZone.style.background = '#2d3748';
+        }
+
+        function unhighlight(e) {
+            uploadZone.style.borderColor = '#4b5563';
+            uploadZone.style.background = 'transparent';
+        }
+
+        uploadZone.addEventListener('drop', handleDrop, false);
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            document.getElementById('folderInput').files = files;
+            handleFolderUpload({target: {files: files}});
         }
     </script>
 </body>
