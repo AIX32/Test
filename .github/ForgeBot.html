@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ForgeBot</title>
+    <style>
+/* General body styling */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #121212; /* Dark background similar to CurseForge */
+    color: #e3e3e3; /* Light text for better contrast */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+    transition: all 0.3s ease;
+}
+
+/* Container with central alignment */
+.container {
+    max-width: 900px;
+    width: 100%;
+    margin: 20px;
+    background-color: #1e1e1e; /* Dark gray container */
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.container:hover {
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4); /* Stronger shadow on hover */
+    transform: translateY(-5px); /* Slight lift effect on hover */
+}
+
+.h1 {
+  text-shadow: 0 0 10px #ff7f00, 0 0 20px #ff7f00;
+}
+
+/* Input fields */
+input[type="text"] {
+    width: 100%;
+    padding: 15px;
+    margin: 10px 0;
+    border: 1px solid #444;
+    border-radius: 8px;
+    background-color: #2a2a2a; /* Darker background for input field */
+    color: #fff; /* Light text for input */
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+/* Glowing effect when input field is focused */
+input[type="text"]:focus {
+    border-color: #ff7f00; /* Orange focus border */
+    outline: none;
+    background-color: #333; /* Slightly lighter background on focus */
+    box-shadow: 0 0 10px #ff7f00, 0 0 20px #ff7f00; /* Glowing effect */
+}
+
+/* Button styles */
+button {
+    padding: 14px 28px;
+    background-color: #ff7f00; /* Orange background */
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    font-size: 16px;
+    text-transform: uppercase;
+}
+
+/* Button hover effects */
+button:hover {
+    background-color: #e67e00; /* Darker orange on hover */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    transform: scale(1.05); /* Slight scale effect on hover */
+}
+
+/* Button active effect */
+button:active {
+    background-color: #cc6a00;
+    transform: scale(1); /* Reset scale on button press */
+}
+
+/* Glow effect on special buttons */
+button.glow {
+    text-shadow: 0 0 12px #ff7f00, 0 0 20px #ff7f00, 0 0 30px #ff7f00; /* Stronger glow effect */
+}
+
+/* Response section */
+.response {
+    margin-top: 30px;
+    font-size: 16px;
+    color: #ccc;
+    transition: all 0.3s ease;
+}
+
+/* Code block styles */
+pre {
+    background-color: #2a2a2a; /* Dark background for code block */
+    color: #f5f5f5; /* Light text in code block */
+    padding: 20px;
+    border-radius: 8px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+/* Card styling */
+.card {
+    background-color: #2a2a2a; /* Card background to match the dark gray theme */
+    padding: 20px;
+    border-radius: 10px;
+    margin: 15px 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, margin-top 0.3s ease;
+}
+
+/* Hover effect on card */
+.card:hover {
+    transform: translateY(-12px); /* Hover effect to lift the card */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); /* Stronger shadow on hover */
+    margin-top: 10px; /* Floating effect by moving the card upwards */
+}
+
+/* Card header styles */
+.card h3 {
+    color: #ff7f00; /* Orange text for headers */
+    font-size: 20px;
+    margin-bottom: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+/* Glowing effect on title hover */
+.card h3:hover {
+    text-shadow: 0 0 12px #ff7f00, 0 0 20px #ff7f00, 0 0 30px #ff7f00; /* Glow effect on hover */
+    color: #ff7f00; /* Glow color */
+}
+
+/* Card paragraph text */
+.card p {
+    color: #ccc;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* Additional responsiveness for smaller screens */
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+    }
+
+    input[type="text"], button {
+        font-size: 14px;
+    }
+
+    .card h3 {
+        font-size: 18px;
+    }
+
+    .card p {
+        font-size: 13px;
+    }
+}
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>ForgeBot</h1>
+        <p>Ask a question (e.g., "What is grass?", "How do I get grass?", "What does grass look like?"):</p>
+
+        <input type="text" id="query" placeholder="Enter your question">
+        <button onclick="searchWiki()">Ask</button>
+
+        <div class="response" id="response"></div>
+    </div>
+
+    <script>
+        const repoOwner = 'AIX32';
+        const repoName = 'WiKi-BForge';
+        const directoryPath = '';
+        const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${directoryPath}`;
+
+        async function fetchFilesFromRepo() {
+            const response = await fetch(apiUrl);
+            if (response.ok) {
+                return await response.json();
+            } else {
+                return [];
+            }
+        }
+
+        async function fetchFileContent(fileUrl) {
+            const response = await fetch(fileUrl);
+            if (response.ok) {
+                return await response.text();
+            } else {
+                return 'Error: Unable to fetch content from GitHub.';
+            }
+        }
+
+        function parseSections(content) {
+            const sections = {
+                'overview': '',
+                'appearance': '',
+                'obtaining': '',
+                'uses': ''
+            };
+
+            const lines = content.split('\n');
+            let currentSection = '';
+
+            for (const line of lines) {
+                const lineLower = line.trim().toLowerCase();
+                if (lineLower.startsWith('overview')) {
+                    currentSection = 'overview';
+                    continue;
+                } else if (lineLower.startsWith('appearance')) {
+                    currentSection = 'appearance';
+                    continue;
+                } else if (lineLower.startsWith('obtaining')) {
+                    currentSection = 'obtaining';
+                    continue;
+                } else if (lineLower.startsWith('uses')) {
+                    currentSection = 'uses';
+                    continue;
+                }
+
+                if (currentSection) {
+                    sections[currentSection] += line + '\n';
+                }
+            }
+
+            return sections;
+        }
+
+        function searchContent(query, sections, filename) {
+            query = query.toLowerCase();
+
+            // Check if the query matches with the item in the current file
+            if (filename.toLowerCase().includes(query.replace("how do i get", "").trim())) {
+                if (query.includes('how do i get')) {
+                    return sections['obtaining'] || 'No relevant information found in Obtaining.';
+                } else if (query.includes('what is')) {
+                    return sections['overview'] || 'No relevant information found in Overview.';
+                } else if (query.includes('look like') || query.includes('appearance')) {
+                    return sections['appearance'] || 'No relevant information found in Appearance.';
+                } else if (query.includes('use') || query.includes('building') || query.includes('terraforming') || query.includes('farming')) {
+                    return sections['uses'] || 'No relevant information found in Uses.';
+                } else {
+                    return 'Sorry, I couldn\'t understand the question.';
+                }
+            }
+            return null; // If it's not the correct file, return null.
+        }
+
+        async function searchWiki() {
+            const query = document.getElementById('query').value.trim();
+            if (!query) {
+                alert('Please enter a question.');
+                return;
+            }
+
+            const files = await fetchFilesFromRepo();
+            let found = false;
+            let responseHtml = '';
+
+            for (const file of files) {
+                if (file.type === 'file') {
+                    const content = await fetchFileContent(file.download_url);
+                    const sections = parseSections(content);
+                    const relevantSection = searchContent(query, sections, file.name);
+
+                    if (relevantSection) {
+                        responseHtml = `
+                            <h2>Answer:</h2>
+                            <pre>${relevantSection}</pre>
+                        `;
+                        found = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!found) {
+                responseHtml = `<p>No information found for "${query}".</p>`;
+            }
+
+            document.getElementById('response').innerHTML = responseHtml;
+        }
+    </script>
+
+</body>
+</html>
