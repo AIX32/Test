@@ -1,269 +1,450 @@
-<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ForgeBot</title>
-</head>
-<style>
-body {
-    font-family: Arial, sans-serif;
-    background-color: #2e2e2e; /* Dark gray background */
-    color: #f0f0f0; /* Light text color for better contrast */
-    margin: 0;
-    padding: 0;
-}
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Bloxd.io Launcher
+  </title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <style>
+   @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
-/* Main container */
-div {
-    max-width: 600px;
-    margin: 40px auto;
-    padding: 20px;
-    background-color: #383838; /* Slightly lighter gray for contrast */
-    border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* Enhanced shadow */
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-div:hover {
-    transform: translateY(-5px); /* Slight hover lift */
-    box-shadow: 0 8px 30px rgba(255, 140, 0, 0.7); /* Glow effect */
-}
-
-/* Heading */
-h1 {
-    font-size: 24px;
-    text-align: center;
-    color: #ff8c00; /* Orange accent */
-    text-shadow: 0 0 8px rgba(255, 140, 0, 0.8); /* Glow effect */
-}
-
-/* Instruction text */
-p {
-    font-size: 16px;
-    margin-bottom: 20px;
-    color: #ccc; /* Softer gray for instructions */
-}
-
-/* Input and Button Container */
-input[type="text"] {
-    width: calc(100% - 20px);
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #555; /* Gray border */
-    border-radius: 4px;
-    margin-bottom: 10px;
-    outline: none;
-    background-color: #4a4a4a; /* Darker input field background */
-    color: #fff; /* White text */
-    transition: border-color 0.3s, box-shadow 0.3s;
-}
-
-input[type="text"]:focus {
-    border-color: #ff8c00; /* Orange accent on focus */
-    box-shadow: 0 0 8px rgba(255, 140, 0, 0.8); /* Glow effect */
-}
-
-/* Button styles */
-button {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    background-color: #ff8c00; /* Orange accent */
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
-    text-shadow: 0 0 8px rgba(255, 140, 0, 0.8); /* Glow effect */
-}
-
-button:hover {
-    background-color: #e67e00; /* Slightly darker orange */
-    transform: translateY(-3px); /* Hover lift */
-    box-shadow: 0 6px 15px rgba(255, 140, 0, 0.7); /* Glow effect */
-}
-
-/* Response Box */
-#response {
-    margin-top: 20px;
-    padding: 10px;
-    font-size: 16px;
-    line-height: 1.5;
-    background-color: #444; /* Dark gray */
-    border-left: 4px solid #ff8c00; /* Orange accent */
-    border-radius: 4px;
-    word-wrap: break-word;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    transition: box-shadow 0.3s;
-}
-
-#response:hover {
-    box-shadow: 0 6px 20px rgba(255, 140, 0, 0.6); /* Glow on hover */
-}
-
-#response h2 {
-    font-size: 18px;
-    margin: 0 0 10px;
-    color: #ff8c00; /* Orange accent */
-    text-shadow: 0 0 8px rgba(255, 140, 0, 0.8); /* Glow effect */
-}
-
-#response pre {
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 14px;
-    color: #f0f0f0;
-    background-color: #333; /* Darker code block background */
-    padding: 10px;
-    border-radius: 4px;
-    overflow-x: auto;
-    box-shadow: 0 0 8px rgba(255, 140, 0, 0.6); /* Subtle glow */
-}
-
-</style>
-<body>
-
-    <div>
-        <h1>ForgeBot</h1>
-        <p>Ask a question (e.g., "What is grass?", "How do I get snow?", "What does wood look like?"):</p>
-
-        <input type="text" id="query" placeholder="Enter your question">
-        <button onclick="searchWiki()">Ask</button>
-
-        <div id="response"></div>
-    </div>
-
-    <script>
-        const repoOwner = 'AIX32';
-        const repoName = 'WiKi-BForge';
-        const directoryPath = '';
-        const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${directoryPath}`;
-
-        async function fetchFilesFromRepo() {
-            const response = await fetch(apiUrl);
-            if (response.ok) {
-                return await response.json();
-            } else {
-                return [];
-            }
+        body {
+            margin: 0;
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: #1a1a1a;
+            color: #ddd;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
         }
 
-        async function fetchFileContent(fileUrl) {
-            const response = await fetch(fileUrl);
-            if (response.ok) {
-                return await response.text();
-            } else {
-                return 'Error: Unable to fetch content from GitHub.';
-            }
+        #menu {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
         }
 
-        function parseSections(content) {
-            const sections = {
-                'overview': '',
-                'appearance': '',
-                'obtaining': '',
-                'uses': ''
-            };
-
-            const lines = content.split('\n');
-            let currentSection = '';
-
-            for (const line of lines) {
-                const lineLower = line.trim().toLowerCase();
-                if (lineLower.startsWith('overview')) {
-                    currentSection = 'overview';
-                    continue;
-                } else if (lineLower.startsWith('appearance')) {
-                    currentSection = 'appearance';
-                    continue;
-                } else if (lineLower.startsWith('obtaining')) {
-                    currentSection = 'obtaining';
-                    continue;
-                } else if (lineLower.startsWith('uses')) {
-                    currentSection = 'uses';
-                    continue;
-                }
-
-                if (currentSection) {
-                    sections[currentSection] += line + '\n';
-                }
-            }
-
-            return sections;
+        #menu button {
+            width: 300px;
+            height: 300px;
+            background-color: #333;
+            border: 2px solid #333;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 12px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
         }
 
-        function searchContent(query, itemName, sections) {
-            query = query.toLowerCase();
-
-            // Match "what is" query to return the overview description
-            if (query.startsWith('what is')) {
-                return sections['overview'] || `No overview information found for ${itemName}.`;
-            } 
-            // Match "how do I get" query to return the obtaining section
-            else if (query.startsWith('how do i get')) {
-                return sections['obtaining'] || `No obtaining information found for ${itemName}.`;
-            } 
-            // Match "what does X look like?" or "appearance" queries
-            else if (query.startsWith('what does') && query.includes('look like')) {
-                return sections['appearance'] || `No appearance information found for ${itemName}.`;
-            } else if (query.includes('appearance')) {
-                return sections['appearance'] || `No appearance information found for ${itemName}.`;
-            }
-            // Match "use" or related queries
-            else if (query.includes('use') || query.includes('building') || query.includes('terraforming') || query.includes('farming')) {
-                return sections['uses'] || `No use information found for ${itemName}.`;
-            }
-
-            return null; // If no section matches
+        #menu button img {
+            width: 80%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 10px;
         }
 
-        async function searchWiki() {
-            const query = document.getElementById('query').value.trim().toLowerCase();
-            const responseDiv = document.getElementById('response');
-            responseDiv.textContent = 'Searching...';
-
-            if (!query) {
-                responseDiv.textContent = 'Please enter a valid query.';
-                return;
-            }
-
-            const files = await fetchFilesFromRepo();
-            if (files.length === 0) {
-                responseDiv.textContent = 'No files found in the repository.';
-                return;
-            }
-
-            // Extract the item name from the query (e.g., "snow" from "what does snow look like?")
-            const itemNameMatch = query.match(/what is (.+)|how do i get (.+)|what does (.+) look like/);
-            const itemName = itemNameMatch ? itemNameMatch[1] || itemNameMatch[2] || itemNameMatch[3] : null;
-
-            if (!itemName) {
-                responseDiv.textContent = 'Please specify an item in your query.';
-                return;
-            }
-
-            for (const file of files) {
-                if (file.type === 'file' && file.name.endsWith('.txt')) {
-                    const content = await fetchFileContent(file.download_url);
-
-                    // Check if the file mentions the item explicitly
-                    if (content.toLowerCase().includes(itemName)) {
-                        const sections = parseSections(content);
-
-                        // Handle specific query types
-                        const result = searchContent(query, itemName, sections);
-                        if (result) {
-                            responseDiv.innerHTML = `<h2>Answer for "${itemName}":</h2><pre>${result}</pre>`;
-                            return;
-                        }
-                    }
-                }
-            }
-
-            responseDiv.innerHTML = `<p>No information found for "${itemName}".</p>`;
+        #menu button:hover {
+            transform: scale(1.1);
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
         }
-    </script>
 
-</body>
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        #iframe-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+        }
+
+        #settings {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            display: none;
+            z-index: 10;
+        }
+
+        .setting-option {
+            margin: 20px;
+            padding: 10px;
+            color: #ddd;
+            font-size: 18px;
+            cursor: pointer;
+            border: 2px solid #444;
+            border-radius: 8px;
+            width: 250px;
+            text-align: center;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .setting-option:hover {
+            background-color: #444;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        #drag-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: grab;
+            z-index: 20;
+            transition: transform 0.3s ease;
+        }
+
+        #drag-button:active {
+            cursor: grabbing;
+        }
+
+        #drag-button:hover {
+            transform: scale(1.2);
+        }
+
+        /* Coordinate Saver Modal */
+        #coordinate-saver {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #333;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+            display: none;
+            z-index: 15;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            background: linear-gradient(360deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0) 50%);
+        }
+
+        #coordinate-saver h1 {
+            margin-bottom: 20px;
+            color: #ddd;
+            font-size: 24px;
+        }
+
+        #coordinate-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        #coordinate-form input {
+            width: 80%;
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 2px solid #444;
+            background-color: #222;
+            color: #ddd;
+        }
+
+        #coordinate-form button {
+            background-color: #ff7a00; /* Forge Orange */
+            color: white;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+            border-radius: 8px;
+            padding: 10px 20px;
+        }
+
+        #coordinate-form button:hover {
+            background-color: #e85c00;
+        }
+
+        #saved-coordinates ul {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 20px;
+            text-align: left;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        #saved-coordinates li {
+            margin: 5px 0;
+            font-size: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #saved-coordinates button {
+            background-color: #e85c00; /* Forge Orange */
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 5px 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #saved-coordinates button:hover {
+            background-color: #e76a00;
+        }
+
+        #close-coordinate-saver {
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        #close-coordinate-saver:hover {
+            background-color: #444;
+        }
+
+        /* Dark Mode Gradient Effect */
+        .dark-mode-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(360deg, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.5) 50%);
+            z-index: 5;
+            display: none;
+            pointer-events: none; /* Allow clicks to pass through */
+        }
+  </style>
+ </head>
+ <body>
+  <!-- Main Menu -->
+  <div id="menu">
+   <button id="bloxd">
+    <img alt="bloxd.io" height="240" src="https://i.imgur.com/3vDqx4q.png" width="240"/>
+    Bloxd.io
+   </button>
+   <button id="bloxd-staging">
+    <img alt="staging" height="240" src="https://i.imgur.com/9d15Ize.png" width="240"/>
+    Bloxd.io Staging
+   </button>
+  </div>
+  <!-- iFrame Container -->
+  <div id="iframe-container">
+   <iframe id="iframe">
+   </iframe>
+  </div>
+  <!-- Settings -->
+  <div id="settings">
+   <div class="setting-option" id="dark-mode-toggle">
+    Toggle Dark Mode
+   </div>
+   <div class="setting-option" id="coordinate-saver-toggle">
+    Coordinate Saver
+   </div>
+   <div class="setting-option" id="close-settings">
+    Close Settings
+   </div>
+  </div>
+  <!-- Dark Mode Overlay -->
+  <div class="dark-mode-overlay" id="dark-overlay">
+  </div>
+  <!-- Coordinate Saver Modal -->
+  <div id="coordinate-saver">
+   <h1>
+    Coordinate Saver
+   </h1>
+   <!-- Coordinate Form -->
+   <div id="coordinate-form">
+    <label for="x">
+     X Coordinate:
+    </label>
+    <input id="x" required="" type="number"/>
+    <br/>
+    <label for="y">
+     Y Coordinate:
+    </label>
+    <input id="y" required="" type="number"/>
+    <br/>
+    <label for="z">
+     Z Coordinate:
+    </label>
+    <input id="z" required="" type="number"/>
+    <br/>
+    <label for="name">
+     Name:
+    </label>
+    <input id="name" required="" type="text"/>
+    <br/>
+    <button id="save-button">
+     Save Coordinates
+    </button>
+   </div>
+   <!-- Saved Coordinates List -->
+   <div id="saved-coordinates">
+    <h2>
+     Saved Coordinates
+    </h2>
+    <ul id="coordinates-list">
+     <!-- Coordinates will be listed here -->
+    </ul>
+   </div>
+   <button id="close-coordinate-saver">
+    Close
+   </button>
+  </div>
+  <!-- Drag Button -->
+  <button id="drag-button">
+   ☰
+  </button>
+  <script>
+   const menu = document.getElementById('menu');
+        const iframeContainer = document.getElementById('iframe-container');
+        const iframe = document.getElementById('iframe');
+        const settingsMenu = document.getElementById('settings');
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const closeSettingsButton = document.getElementById('close-settings');
+        const coordinateSaverToggle = document.getElementById('coordinate-saver-toggle');
+        const coordinateSaver = document.getElementById('coordinate-saver');
+        const saveButton = document.getElementById('save-button');
+        const coordinatesList = document.getElementById('coordinates-list');
+        const darkOverlay = document.getElementById('dark-overlay');
+        const dragButton = document.getElementById('drag-button');
+        let offsetX, offsetY;
+
+        // Load saved coordinates from localStorage
+        function loadCoordinates() {
+            const savedCoordinates = JSON.parse(localStorage.getItem('coordinates')) || [];
+            savedCoordinates.forEach(coord => {
+                const li = document.createElement('li');
+                li.textContent = `${coord.name}: (${coord.x}, ${coord.y}, ${coord.z})`;
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.addEventListener('click', () => {
+                    deleteCoordinate(coord);
+                    li.remove();
+                });
+                li.appendChild(deleteButton);
+                coordinatesList.appendChild(li);
+            });
+        }
+
+        // Save coordinates to localStorage
+        function saveCoordinate(x, y, z, name) {
+            const coordinates = JSON.parse(localStorage.getItem('coordinates')) || [];
+            coordinates.push({ x, y, z, name });
+            localStorage.setItem('coordinates', JSON.stringify(coordinates));
+        }
+
+        // Delete coordinate from localStorage
+        function deleteCoordinate(coord) {
+            const coordinates = JSON.parse(localStorage.getItem('coordinates')) || [];
+            const filteredCoordinates = coordinates.filter(c => c !== coord);
+            localStorage.setItem('coordinates', JSON.stringify(filteredCoordinates));
+        }
+
+        // Open Settings Menu
+        function openSettings() {
+            settingsMenu.style.display = 'flex';
+        }
+
+        // Close Settings Menu
+        closeSettingsButton.addEventListener('click', () => {
+            settingsMenu.style.display = 'none';
+        });
+
+        // Enable Dark Mode Toggle
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            darkOverlay.style.display = darkOverlay.style.display === 'none' ? 'block' : 'none';
+        });
+
+        // Open Coordinate Saver Modal
+        coordinateSaverToggle.addEventListener('click', () => {
+            coordinateSaver.style.display = 'block';
+        });
+
+        // Close Coordinate Saver Modal
+        document.getElementById('close-coordinate-saver').addEventListener('click', () => {
+            coordinateSaver.style.display = 'none';
+        });
+
+        // Save Coordinates
+        saveButton.addEventListener('click', () => {
+            const x = document.getElementById('x').value;
+            const y = document.getElementById('y').value;
+            const z = document.getElementById('z').value;
+            const name = document.getElementById('name').value;
+
+            if (x && y && z && name) {
+                saveCoordinate(x, y, z, name);
+                loadCoordinates(); // Reload coordinates after saving
+            }
+        });
+
+        // Open URL in iframe
+        function openUrl(url) {
+            iframeContainer.style.display = 'block';
+            iframe.src = url;
+        }
+
+        // Button Event Listeners
+        document.getElementById('bloxd').addEventListener('click', () => openUrl('https://bloxd.io'));
+        document.getElementById('bloxd-staging').addEventListener('click', () => openUrl('https://staging.bloxd.io'));
+
+        // Open Settings on Drag Button Click
+        dragButton.addEventListener('click', () => {
+            openSettings();
+        });
+
+        // Drag functionality
+        dragButton.addEventListener('mousedown', (e) => {
+            offsetX = e.clientX - dragButton.offsetLeft;
+            offsetY = e.clientY - dragButton.offsetTop;
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('mouseup', () => {
+                document.removeEventListener('mousemove', drag);
+            });
+        });
+
+        function drag(e) {
+            dragButton.style.left = `${e.clientX - offsetX}px`;
+            dragButton.style.top = `${e.clientY - offsetY}px`;
+        }
+
+        // Load coordinates on page load
+        loadCoordinates();
+  </script>
+ </body>
 </html>
