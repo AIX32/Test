@@ -1,269 +1,222 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ForgeBot</title>
-</head>
-<style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BForge Skins</title>
+  <style>
 body {
-    font-family: Arial, sans-serif;
-    background-color: #2e2e2e; /* Dark gray background */
-    color: #f0f0f0; /* Light text color for better contrast */
-    margin: 0;
-    padding: 0;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background: #1e1e1e; /* Dark gray background */
+  color: #ff7a00; /* CurseForge orange text */
+  padding: 20px;
+  margin: 0;
 }
 
-/* Main container */
-div {
-    max-width: 600px;
-    margin: 40px auto;
-    padding: 20px;
-    background-color: #383838; /* Slightly lighter gray for contrast */
-    border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* Enhanced shadow */
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-div:hover {
-    transform: translateY(-5px); /* Slight hover lift */
-    box-shadow: 0 8px 30px rgba(255, 140, 0, 0.7); /* Glow effect */
-}
-
-/* Heading */
 h1 {
-    font-size: 24px;
-    text-align: center;
-    color: #ff8c00; /* Orange accent */
-    text-shadow: 0 0 8px rgba(255, 140, 0, 0.8); /* Glow effect */
+  color: #ff7a00; /* CurseForge orange heading */
+  margin-bottom: 10px;
+  text-shadow: 0 0 10px #ff7a00; /* Glow effect */
 }
 
-/* Instruction text */
 p {
-    font-size: 16px;
-    margin-bottom: 20px;
-    color: #ccc; /* Softer gray for instructions */
+  margin-bottom: 20px;
+  color: #fff;
 }
 
-/* Input and Button Container */
-input[type="text"] {
-    width: calc(100% - 20px);
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #555; /* Gray border */
-    border-radius: 4px;
-    margin-bottom: 10px;
-    outline: none;
-    background-color: #4a4a4a; /* Darker input field background */
-    color: #fff; /* White text */
-    transition: border-color 0.3s, box-shadow 0.3s;
+input, button {
+  margin: 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease; /* Smooth hover transition */
 }
 
-input[type="text"]:focus {
-    border-color: #ff8c00; /* Orange accent on focus */
-    box-shadow: 0 0 8px rgba(255, 140, 0, 0.8); /* Glow effect */
+input {
+  background: #333333; /* Dark gray background */
+  color: #ff7a00; /* CurseForge orange text */
+  box-shadow: 0 0 5px #ff7a00; /* Glow effect */
 }
 
-/* Button styles */
+input:hover {
+  background: #444444; /* Slightly lighter gray for hover */
+  box-shadow: 0 0 15px #ff7a00; /* Stronger glow on hover */
+}
+
 button {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    background-color: #ff8c00; /* Orange accent */
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
-    text-shadow: 0 0 8px rgba(255, 140, 0, 0.8); /* Glow effect */
+  background: #ff7a00; /* CurseForge orange background */
+  color: #1e1e1e; /* Dark gray text */
+  font-weight: bold;
+  box-shadow: 0 0 5px #ff7a00; /* Glow effect */
 }
 
 button:hover {
-    background-color: #e67e00; /* Slightly darker orange */
-    transform: translateY(-3px); /* Hover lift */
-    box-shadow: 0 6px 15px rgba(255, 140, 0, 0.7); /* Glow effect */
+  background: #e66300; /* Darker orange on hover */
+  color: #ffffff;
+  box-shadow: 0 0 15px #ff7a00; /* Stronger glow on hover */
 }
 
-/* Response Box */
-#response {
-    margin-top: 20px;
-    padding: 10px;
-    font-size: 16px;
-    line-height: 1.5;
-    background-color: #444; /* Dark gray */
-    border-left: 4px solid #ff8c00; /* Orange accent */
-    border-radius: 4px;
-    word-wrap: break-word;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    transition: box-shadow 0.3s;
+canvas {
+  display: none;
 }
 
-#response:hover {
-    box-shadow: 0 6px 20px rgba(255, 140, 0, 0.6); /* Glow on hover */
+#fileInputWrapper {
+  display: inline-block;
+  position: relative;
+  margin-top: 20px;
 }
 
-#response h2 {
-    font-size: 18px;
-    margin: 0 0 10px;
-    color: #ff8c00; /* Orange accent */
-    text-shadow: 0 0 8px rgba(255, 140, 0, 0.8); /* Glow effect */
+#fileInputWrapper input {
+  position: absolute;
+  opacity: 0;
+  z-index: 10;
+  cursor: pointer;
 }
 
-#response pre {
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 14px;
-    color: #f0f0f0;
-    background-color: #333; /* Darker code block background */
-    padding: 10px;
-    border-radius: 4px;
-    overflow-x: auto;
-    box-shadow: 0 0 8px rgba(255, 140, 0, 0.6); /* Subtle glow */
+#fileInputWrapper button {
+  z-index: 5;
 }
 
-</style>
+#skinPreview {
+  margin-top: 20px;
+  border: 1px solid #ff7a00; /* CurseForge orange border */
+  padding: 10px;
+  display: inline-block;
+  background-color: #333333; /* Dark gray background */
+  max-width: 256px;
+  max-height: 256px;
+  box-shadow: 0 0 5px #ff7a00; /* Glow effect */
+}
+
+#skinPreview img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+  </style>
+</head>
 <body>
+  <h1>Converter</h1>
+  <p>Upload a Minecraft skin. Slim is not supported</p>
 
-    <div>
-        <h1>ForgeBot</h1>
-        <p>Ask a question (e.g., "What is grass?", "How do I get snow?", "What does wood look like?"):</p>
+  <div id="fileInputWrapper">
+    <button onclick="document.getElementById('fileInput').click()">Select Minecraft Skin</button>
+    <input type="file" id="fileInput" accept="image/png">
+  </div>
+  <br>
 
-        <input type="text" id="query" placeholder="Enter your question">
-        <button onclick="searchWiki()">Ask</button>
+  <div id="skinPreview">
+    <img id="previewImage" src="" alt="Minecraft Skin Preview">
+  </div>
 
-        <div id="response"></div>
-    </div>
+  <button id="convertButton">Convert and Download</button>
+  <br>
 
-    <script>
-        const repoOwner = 'AIX32';
-        const repoName = 'WiKi-BForge';
-        const directoryPath = '';
-        const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${directoryPath}`;
+  <canvas id="mcSkinCanvas" width="64" height="64"></canvas>
+  <canvas id="bloxdSkinCanvas" width="4096" height="64"></canvas>
 
-        async function fetchFilesFromRepo() {
-            const response = await fetch(apiUrl);
-            if (response.ok) {
-                return await response.json();
-            } else {
-                return [];
-            }
-        }
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script>
+    const fileInput = document.getElementById('fileInput');
+    const convertButton = document.getElementById('convertButton');
+    const mcSkinCanvas = document.getElementById('mcSkinCanvas');
+    const bloxdSkinCanvas = document.getElementById('bloxdSkinCanvas');
+    const mcSkinContext = mcSkinCanvas.getContext('2d');
+    const bloxdSkinContext = bloxdSkinCanvas.getContext('2d');
+    const previewImage = document.getElementById('previewImage');
 
-        async function fetchFileContent(fileUrl) {
-            const response = await fetch(fileUrl);
-            if (response.ok) {
-                return await response.text();
-            } else {
-                return 'Error: Unable to fetch content from GitHub.';
-            }
-        }
+    let mcSkinImage = null;
+    const backgroundImageUrl = 'https://i.imgur.com/2x06CJs.png';
+    let bgImage = new Image();
+    let bgImageLoaded = false;
 
-        function parseSections(content) {
-            const sections = {
-                'overview': '',
-                'appearance': '',
-                'obtaining': '',
-                'uses': ''
-            };
+    // Set cross-origin for the background image to avoid tainting the canvas
+    bgImage.crossOrigin = 'anonymous';
 
-            const lines = content.split('\n');
-            let currentSection = '';
+    // Load background image
+    bgImage.onload = () => {
+      console.log("Background image loaded");
+      bgImageLoaded = true;
+      bloxdSkinContext.clearRect(0, 0, bloxdSkinCanvas.width, bloxdSkinCanvas.height);
+      bloxdSkinContext.drawImage(bgImage, 0, 0, bloxdSkinCanvas.width, bloxdSkinCanvas.height); 
+    };
+    bgImage.src = backgroundImageUrl;
 
-            for (const line of lines) {
-                const lineLower = line.trim().toLowerCase();
-                if (lineLower.startsWith('overview')) {
-                    currentSection = 'overview';
-                    continue;
-                } else if (lineLower.startsWith('appearance')) {
-                    currentSection = 'appearance';
-                    continue;
-                } else if (lineLower.startsWith('obtaining')) {
-                    currentSection = 'obtaining';
-                    continue;
-                } else if (lineLower.startsWith('uses')) {
-                    currentSection = 'uses';
-                    continue;
-                }
+    // File input event listener
+    fileInput.addEventListener('change', (event) => {
+      const file = event.target.files[0];
+      if (file && file.type === 'image/png') {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          mcSkinImage = new Image();
+          mcSkinImage.onload = () => {
+            console.log("Minecraft skin loaded");
+            mcSkinContext.clearRect(0, 0, mcSkinCanvas.width, mcSkinCanvas.height);
+            mcSkinContext.drawImage(mcSkinImage, 0, 0, 64, 64);
+            
+            // Display the preview image
+            previewImage.src = e.target.result;
+          };
+          mcSkinImage.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      } else {
+        alert('Please upload a valid PNG image.');
+      }
+    });
 
-                if (currentSection) {
-                    sections[currentSection] += line + '\n';
-                }
-            }
+    // Convert button event listener
+    convertButton.addEventListener('click', async () => {
+      if (!mcSkinImage) {
+        alert('Please upload a Minecraft skin first.');
+        return;
+      }
 
-            return sections;
-        }
+      // Wait for the background image to load
+      if (!bgImageLoaded) {
+        alert('Background image is still loading, please try again later.');
+        return;
+      }
 
-        function searchContent(query, itemName, sections) {
-            query = query.toLowerCase();
+      console.log("Preparing to generate the Bloxd.io skin");
 
-            // Match "what is" query to return the overview description
-            if (query.startsWith('what is')) {
-                return sections['overview'] || `No overview information found for ${itemName}.`;
-            } 
-            // Match "how do I get" query to return the obtaining section
-            else if (query.startsWith('how do i get')) {
-                return sections['obtaining'] || `No obtaining information found for ${itemName}.`;
-            } 
-            // Match "what does X look like?" or "appearance" queries
-            else if (query.startsWith('what does') && query.includes('look like')) {
-                return sections['appearance'] || `No appearance information found for ${itemName}.`;
-            } else if (query.includes('appearance')) {
-                return sections['appearance'] || `No appearance information found for ${itemName}.`;
-            }
-            // Match "use" or related queries
-            else if (query.includes('use') || query.includes('building') || query.includes('terraforming') || query.includes('farming')) {
-                return sections['uses'] || `No use information found for ${itemName}.`;
-            }
+      // Clear the Bloxd.io canvas and draw the background again
+      bloxdSkinContext.clearRect(0, 0, bloxdSkinCanvas.width, bloxdSkinCanvas.height);
+      bloxdSkinContext.drawImage(bgImage, 0, 0, bloxdSkinCanvas.width, bloxdSkinCanvas.height);
 
-            return null; // If no section matches
-        }
+      // Draw the Minecraft skin on top of the background
+      bloxdSkinContext.drawImage(mcSkinImage, 128, 0, 64, 64);
 
-        async function searchWiki() {
-            const query = document.getElementById('query').value.trim().toLowerCase();
-            const responseDiv = document.getElementById('response');
-            responseDiv.textContent = 'Searching...';
+      // Create the Bloxd.io skin PNG
+      const bloxdSkinDataUrl = bloxdSkinCanvas.toDataURL('image/png');
+      console.log("Generated data URL for Bloxd.io skin");
 
-            if (!query) {
-                responseDiv.textContent = 'Please enter a valid query.';
-                return;
-            }
+      // Convert the Data URL to a Blob
+      const response = await fetch(bloxdSkinDataUrl);
+      const bloxdSkinBlob = await response.blob();
+      console.log("Blob created for the skin");
 
-            const files = await fetchFilesFromRepo();
-            if (files.length === 0) {
-                responseDiv.textContent = 'No files found in the repository.';
-                return;
-            }
+      // Create a zip file with the folder structure
+      const zip = new JSZip();
+      const forgeSkinsFolder = zip.folder('ForgeSkins');
+      const texturesFolder = forgeSkinsFolder.folder('textures');
+      texturesFolder.file('PlayerAtlas.png', bloxdSkinBlob);
 
-            // Extract the item name from the query (e.g., "snow" from "what does snow look like?")
-            const itemNameMatch = query.match(/what is (.+)|how do i get (.+)|what does (.+) look like/);
-            const itemName = itemNameMatch ? itemNameMatch[1] || itemNameMatch[2] || itemNameMatch[3] : null;
-
-            if (!itemName) {
-                responseDiv.textContent = 'Please specify an item in your query.';
-                return;
-            }
-
-            for (const file of files) {
-                if (file.type === 'file' && file.name.endsWith('.txt')) {
-                    const content = await fetchFileContent(file.download_url);
-
-                    // Check if the file mentions the item explicitly
-                    if (content.toLowerCase().includes(itemName)) {
-                        const sections = parseSections(content);
-
-                        // Handle specific query types
-                        const result = searchContent(query, itemName, sections);
-                        if (result) {
-                            responseDiv.innerHTML = `<h2>Answer for "${itemName}":</h2><pre>${result}</pre>`;
-                            return;
-                        }
-                    }
-                }
-            }
-
-            responseDiv.innerHTML = `<p>No information found for "${itemName}".</p>`;
-        }
-    </script>
-
+      // Generate the zip file and trigger download
+      zip.generateAsync({ type: 'blob' }).then((content) => {
+        const downloadLink = document.createElement('a');
+        downloadLink.href = URL.createObjectURL(content);
+        downloadLink.download = 'ForgeSkin.zip';
+        downloadLink.style.display = 'none';
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+        console.log("Download triggered");
+      });
+    });
+  </script>
 </body>
 </html>
