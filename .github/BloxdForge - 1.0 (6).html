@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BloxdForge - Runner</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+    <script>
+        
+        const encodedURL = "aHR0cHM6Ly9yYXcuZ2l0aGFjay5jb20vQUlYMzIvQmxveGRGb3JnZS1GaWxlcy9tYWluLy5naXRodWIvQmxveGRGb3JnZSUyMDAuOTk5Lmh0bWw=";
+        
+        const decodedURL = atob(encodedURL);
+        
+        window.onload = () => {
+            document.getElementById("content-frame").src = decodedURL;
+        };
+    </script>
+</head>
+<body>
+    <iframe id="content-frame"></iframe>
+</body>
+</html>
