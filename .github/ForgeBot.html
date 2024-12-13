@@ -1,222 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BForge Skins</title>
-  <style>
-body {
-  font-family: Arial, sans-serif;
-  text-align: center;
-  background: #1e1e1e; /* Dark gray background */
-  color: #ff7a00; /* CurseForge orange text */
-  padding: 20px;
-  margin: 0;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bloxdoforge - Info & Credits</title>
+    <style>
+        body {
+            font-family: 'Rubik', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #2d2d2d;
+            color: #e0e0e0;
+        }
 
-h1 {
-  color: #ff7a00; /* CurseForge orange heading */
-  margin-bottom: 10px;
-  text-shadow: 0 0 10px #ff7a00; /* Glow effect */
-}
+        header {
+            background-color: #ff6f00;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+        }
 
-p {
-  margin-bottom: 20px;
-  color: #fff;
-}
+        main {
+            flex: 1;
+            padding: 1rem 2rem;
+            overflow-y: auto;
+        }
 
-input, button {
-  margin: 10px;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: all 0.3s ease; /* Smooth hover transition */
-}
+        footer {
+            background-color: #333;
+            color: white;
+            display: flex;
+            justify-content: flex-start;
+            gap: 1rem;
+            align-items: center;
+            padding: 1rem 0.5rem;
+            position: sticky;
+            bottom: 0;
+        }
 
-input {
-  background: #333333; /* Dark gray background */
-  color: #ff7a00; /* CurseForge orange text */
-  box-shadow: 0 0 5px #ff7a00; /* Glow effect */
-}
+        footer a {
+            color: white;
+            text-decoration: none;
+            font-size: 0.9rem;
+            border: 1px solid white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s;
+        }
 
-input:hover {
-  background: #444444; /* Slightly lighter gray for hover */
-  box-shadow: 0 0 15px #ff7a00; /* Stronger glow on hover */
-}
+        footer a:hover {
+            background-color: #ff6f00;
+            color: white;
+            transform: scale(1.05);
+        }
 
-button {
-  background: #ff7a00; /* CurseForge orange background */
-  color: #1e1e1e; /* Dark gray text */
-  font-weight: bold;
-  box-shadow: 0 0 5px #ff7a00; /* Glow effect */
-}
+        .credits-section {
+            margin-bottom: 2rem;
+        }
 
-button:hover {
-  background: #e66300; /* Darker orange on hover */
-  color: #ffffff;
-  box-shadow: 0 0 15px #ff7a00; /* Stronger glow on hover */
-}
+        h2 {
+            font-family: 'Rubik Mono One', sans-serif;
+            color: #ff6f00;
+        }
 
-canvas {
-  display: none;
-}
-
-#fileInputWrapper {
-  display: inline-block;
-  position: relative;
-  margin-top: 20px;
-}
-
-#fileInputWrapper input {
-  position: absolute;
-  opacity: 0;
-  z-index: 10;
-  cursor: pointer;
-}
-
-#fileInputWrapper button {
-  z-index: 5;
-}
-
-#skinPreview {
-  margin-top: 20px;
-  border: 1px solid #ff7a00; /* CurseForge orange border */
-  padding: 10px;
-  display: inline-block;
-  background-color: #333333; /* Dark gray background */
-  max-width: 256px;
-  max-height: 256px;
-  box-shadow: 0 0 5px #ff7a00; /* Glow effect */
-}
-
-#skinPreview img {
-  max-width: 100%;
-  max-height: 100%;
-}
-
-  </style>
+        p {
+            line-height: 1.6;
+        }
+    </style>
 </head>
 <body>
-  <h1>Converter</h1>
-  <p>Upload a Minecraft skin. Slim is not supported</p>
+    <header>
+        <h1>Bloxdoforge - Info & Credits</h1>
+    </header>
 
-  <div id="fileInputWrapper">
-    <button onclick="document.getElementById('fileInput').click()">Select Minecraft Skin</button>
-    <input type="file" id="fileInput" accept="image/png">
-  </div>
-  <br>
+    <main>
+        <section class="credits-section">
+            <h2>Contributors</h2>
+            <p>Special thanks to our amazing team and community members who made BloxdForge possible:</p>
+            <ul>
+                <li>A_I_X - Lead Developer</li>
+                <li>A_I_X - UI/UX Designer</li>
+                <li>KHORTU - Backend Engineer</li>
+                <li>Community Testers: Infernal, Sniper, andye_da_Grass, Sporalitizer</li>
+            </ul>
+        </section>
 
-  <div id="skinPreview">
-    <img id="previewImage" src="" alt="Minecraft Skin Preview">
-  </div>
+        <section class="credits-section">
+            <h2>Assets & Resources</h2>
+            <p>We utilized these amazing resources to bring Bloxdoforge to life:</p>
+            <ul>
+                <li>Icons from FontAwesome</li>
+                <li>Fonts: Rubik and Rubik Mono One</li>
+                <li>Html editor: OneCompoler</li>
+            </ul>
+        </section>
+    </main>
 
-  <button id="convertButton">Convert and Download</button>
-  <br>
+<footer>
+    <a href="https://aix-in-short.carrd.co" target="_blank" rel="noopener noreferrer">Other Projects</a>
+    <a href="https://discord.gg/nVgUe4qrhr" target="_blank" rel="noopener noreferrer">Discord</a>
+    <a href="https://bloxdforge.carrd.co" target="_blank" rel="noopener noreferrer">Site</a>
+</footer>
 
-  <canvas id="mcSkinCanvas" width="64" height="64"></canvas>
-  <canvas id="bloxdSkinCanvas" width="4096" height="64"></canvas>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-  <script>
-    const fileInput = document.getElementById('fileInput');
-    const convertButton = document.getElementById('convertButton');
-    const mcSkinCanvas = document.getElementById('mcSkinCanvas');
-    const bloxdSkinCanvas = document.getElementById('bloxdSkinCanvas');
-    const mcSkinContext = mcSkinCanvas.getContext('2d');
-    const bloxdSkinContext = bloxdSkinCanvas.getContext('2d');
-    const previewImage = document.getElementById('previewImage');
-
-    let mcSkinImage = null;
-    const backgroundImageUrl = 'https://i.imgur.com/2x06CJs.png';
-    let bgImage = new Image();
-    let bgImageLoaded = false;
-
-    // Set cross-origin for the background image to avoid tainting the canvas
-    bgImage.crossOrigin = 'anonymous';
-
-    // Load background image
-    bgImage.onload = () => {
-      console.log("Background image loaded");
-      bgImageLoaded = true;
-      bloxdSkinContext.clearRect(0, 0, bloxdSkinCanvas.width, bloxdSkinCanvas.height);
-      bloxdSkinContext.drawImage(bgImage, 0, 0, bloxdSkinCanvas.width, bloxdSkinCanvas.height); 
-    };
-    bgImage.src = backgroundImageUrl;
-
-    // File input event listener
-    fileInput.addEventListener('change', (event) => {
-      const file = event.target.files[0];
-      if (file && file.type === 'image/png') {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          mcSkinImage = new Image();
-          mcSkinImage.onload = () => {
-            console.log("Minecraft skin loaded");
-            mcSkinContext.clearRect(0, 0, mcSkinCanvas.width, mcSkinCanvas.height);
-            mcSkinContext.drawImage(mcSkinImage, 0, 0, 64, 64);
-            
-            // Display the preview image
-            previewImage.src = e.target.result;
-          };
-          mcSkinImage.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-      } else {
-        alert('Please upload a valid PNG image.');
-      }
-    });
-
-    // Convert button event listener
-    convertButton.addEventListener('click', async () => {
-      if (!mcSkinImage) {
-        alert('Please upload a Minecraft skin first.');
-        return;
-      }
-
-      // Wait for the background image to load
-      if (!bgImageLoaded) {
-        alert('Background image is still loading, please try again later.');
-        return;
-      }
-
-      console.log("Preparing to generate the Bloxd.io skin");
-
-      // Clear the Bloxd.io canvas and draw the background again
-      bloxdSkinContext.clearRect(0, 0, bloxdSkinCanvas.width, bloxdSkinCanvas.height);
-      bloxdSkinContext.drawImage(bgImage, 0, 0, bloxdSkinCanvas.width, bloxdSkinCanvas.height);
-
-      // Draw the Minecraft skin on top of the background
-      bloxdSkinContext.drawImage(mcSkinImage, 128, 0, 64, 64);
-
-      // Create the Bloxd.io skin PNG
-      const bloxdSkinDataUrl = bloxdSkinCanvas.toDataURL('image/png');
-      console.log("Generated data URL for Bloxd.io skin");
-
-      // Convert the Data URL to a Blob
-      const response = await fetch(bloxdSkinDataUrl);
-      const bloxdSkinBlob = await response.blob();
-      console.log("Blob created for the skin");
-
-      // Create a zip file with the folder structure
-      const zip = new JSZip();
-      const forgeSkinsFolder = zip.folder('ForgeSkins');
-      const texturesFolder = forgeSkinsFolder.folder('textures');
-      texturesFolder.file('PlayerAtlas.png', bloxdSkinBlob);
-
-      // Generate the zip file and trigger download
-      zip.generateAsync({ type: 'blob' }).then((content) => {
-        const downloadLink = document.createElement('a');
-        downloadLink.href = URL.createObjectURL(content);
-        downloadLink.download = 'ForgeSkin.zip';
-        downloadLink.style.display = 'none';
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        document.body.removeChild(downloadLink);
-        console.log("Download triggered");
-      });
-    });
-  </script>
 </body>
 </html>
