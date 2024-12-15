@@ -66,6 +66,7 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
             overflow: hidden;
             transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
         }
         .card:hover {
             transform: translateY(-10px);
@@ -89,18 +90,81 @@
         }
 
         ::-webkit-scrollbar {
-width: 0.1px;
-}
+            width: 0.1px;
+        }
 
-/* Track */
-::-webkit-scrollbar-track {
-background: ##343434;
-}
+        /* Track */
+        ::-webkit-scrollbar-track {
+            background: ##343434;
+        }
 
-/* Handle */
-::-webkit-scrollbar-thumb {
-background: ##4C4D4D;
-}
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+            background: ##4C4D4D;
+        }
+
+        /* Popup styling */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+        }
+        .popup-content {
+            background-color: #383838;
+            padding: 20px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            max-width: 900px;
+            max-height: 700px;
+            position: relative;
+            overflow-y: auto;
+        }
+        .popup img {
+            width: 400px;
+            height: auto;
+            object-fit: contain;
+            margin-right: 20px;
+            border-radius: 10px;
+            border: none;
+        }
+        .popup .desc-text {
+            color: #e5e5e5;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+        }
+        .popup .popup-buttons {
+            display: flex;
+            justify-content: flex-end;
+            width: 100%;
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            margin-left: 30px;
+        }
+        .popup button {
+            background-color: #ffcc00;
+            color: #383838;
+            border: none;
+            padding: 10px;
+            font-size: 1.1em;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 30px;
+        }
+        .popup button:hover {
+            background-color: #e5e5e5;
+        }
+        .popup .desc-text {
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
@@ -112,6 +176,19 @@ background: ##4C4D4D;
 
     <!-- Cards Container -->
     <div class="cards-container" id="cards-container"></div>
+
+    <!-- Popup Modal -->
+    <div class="popup" id="popup">
+        <div class="popup-content">
+            <div style="display: flex;">
+                <img id="popup-image" src="" alt="Banner">
+                <div class="desc-text" id="popup-text"></div>
+            </div>
+            <div class="popup-buttons">
+                <button id="download-btn">Download Texture Pack</button>
+            </div>
+        </div>
+    </div>
 
     <script>
         const repoOwner = "AIX32"; // Replace with the actual GitHub username
@@ -155,6 +232,23 @@ background: ##4C4D4D;
             return "https://via.placeholder.com/220x220?text=No+Banner"; // Default placeholder image
         }
 
+        async function extractDescription(zipUrl) {
+            try {
+                const response = await fetch(zipUrl);
+                const blob = await response.blob();
+                const zip = await JSZip.loadAsync(blob);
+
+                const descFile = zip.files["desc.txt"];
+                if (descFile) {
+                    const descText = await descFile.async("string");
+                    return descText;
+                }
+            } catch (error) {
+                console.warn("No desc.txt found in:", zipUrl);
+            }
+            return "No description available.";
+        }
+
         function displayCard(name, url, bannerUrl) {
             const container = document.getElementById("cards-container");
 
@@ -165,6 +259,11 @@ background: ##4C4D4D;
             const img = document.createElement("img");
             img.src = bannerUrl;
             img.alt = name;
+
+            img.addEventListener("click", async () => {
+                const descText = await extractDescription(url);
+                openPopup(bannerUrl, descText, url);
+            });
 
             const title = document.createElement("div");
             title.className = "card-title";
@@ -184,6 +283,29 @@ background: ##4C4D4D;
                 card.style.display = name.includes(query) ? "block" : "none";
             });
         }
+
+        function openPopup(imageUrl, descText, downloadUrl) {
+            const popup = document.getElementById("popup");
+            const popupImage = document.getElementById("popup-image");
+            const popupText = document.getElementById("popup-text");
+            const downloadButton = document.getElementById("download-btn");
+
+            popupImage.src = imageUrl;
+            popupText.textContent = descText;
+
+            downloadButton.onclick = () => {
+                window.location.href = downloadUrl;
+            };
+
+            popup.style.display = "flex";
+        }
+
+        // Close the popup when clicked outside the content area
+        document.getElementById("popup").addEventListener("click", (event) => {
+            if (event.target === document.getElementById("popup")) {
+                document.getElementById("popup").style.display = "none";
+            }
+        });
 
         // Load JSZip library
         const script = document.createElement("script");
