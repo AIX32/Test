@@ -247,6 +247,14 @@
             display: none;
             pointer-events: none; /* Allow clicks to pass through */
         }
+        
+        #fps-ping-display {
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 10px;
+    border-radius: 8px;
+    text-align: left;
+}
+
   </style>
  </head>
  <body>
@@ -277,11 +285,18 @@
    <div class="setting-option" id="resolution-toggle">
     Boost FPS
    </div>  
+   <div class="setting-option" id="fps-ping-toggle">
+    Toggle FPS/Ping Tracker
+   </div>
    <div class="setting-option" id="close-settings">
     Close Settings
    </div>
    <!-- Inside the #settings div -->
 
+<div id="fps-ping-display" style="position: fixed; top: 10px; left: 10px; color: #fff; font-size: 14px; display: none; z-index: 100;">
+    <div id="fps-display">FPS: Calculating...</div>
+    <div id="ping-display">Ping: Calculating...</div>
+</div>
 
   </div>
   <!-- Dark Mode Overlay -->
@@ -509,6 +524,57 @@ document.getElementById('resolution-toggle').addEventListener('click', () => {
     // Apply scaling to the iframe (adjust resolution)
     applyResolutionScale(scaleFactor);
 });
+
+    const fpsPingToggle = document.getElementById('fps-ping-toggle');
+    const fpsPingDisplay = document.getElementById('fps-ping-display');
+    const fpsDisplay = document.getElementById('fps-display');
+    const pingDisplay = document.getElementById('ping-display');
+
+    let showFpsPing = false;
+    let lastFrameTime = performance.now();
+    let frameCount = 0;
+
+    // Function to update FPS
+    function updateFPS() {
+        const now = performance.now();
+        frameCount++;
+        if (now - lastFrameTime >= 1000) {
+            const fps = frameCount;
+            fpsDisplay.textContent = `FPS: ${fps}`;
+            frameCount = 0;
+            lastFrameTime = now;
+        }
+        if (showFpsPing) {
+            requestAnimationFrame(updateFPS);
+        }
+    }
+
+    // Function to simulate Ping calculation
+    function updatePing() {
+        const startTime = Date.now();
+        fetch(window.location.href, { method: 'HEAD' })
+            .then(() => {
+                const ping = Date.now() - startTime;
+                pingDisplay.textContent = `Ping: ${ping} ms`;
+            })
+            .catch(() => {
+                pingDisplay.textContent = 'Ping: Error';
+            });
+        if (showFpsPing) {
+            setTimeout(updatePing, 1000);
+        }
+    }
+
+    // Toggle FPS and Ping display
+    fpsPingToggle.addEventListener('click', () => {
+        showFpsPing = !showFpsPing;
+        fpsPingDisplay.style.display = showFpsPing ? 'block' : 'none';
+        if (showFpsPing) {
+            updateFPS();
+            updatePing();
+        }
+    });
+
 
         // Load coordinates on page load
         loadCoordinates();
