@@ -1,3 +1,10 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Materialize - TPack Editor</title>
+  <style>
 body {
   font-family: Arial, sans-serif;
   display: flex;
@@ -187,3 +194,241 @@ canvas {
 ::-webkit-scrollbar-thumb:hover {
   background: #888; /* Lighter thumb color when hovered */
 }
+
+  </style>
+</head>
+<body>
+  <div id="sidebar">
+    <h3>Textures:</h3>
+    <ul id="file-list"></ul>
+    <button id="upload-folder-btn">Upload Textures</button>
+    <input type="file" id="folder-input" accept="image/png" multiple directory style="display: none;" />
+  </div>
+  <div id="canvas-container">
+    <canvas id="canvas" width="500" height="500"></canvas>
+  </div>
+  <div id="toolbar">
+    <button id="darken-tool">Darken</button>
+    <button id="lighten-tool">Lighten</button>
+    <button id="eraser-tool">Eraser</button>
+    <button id="eyedropper-tool">Eyedropper</button>
+    <button id="pencil-tool">Pencil</button>
+    <input type="color" id="color-picker" value="#FFFFFF" />
+    <button id="save-btn">Save Texture</button>
+  </div>
+  
+  <div id="color-palette">
+  <h4>Colors:</h4>
+  <div id="custom-colors"></div>
+  <input type="color" id="color-input" />
+  <button id="add-color-btn">Add Color</button>
+</div>
+
+  <script>
+    let selectedTexture = null;
+    let canvas = document.getElementById('canvas');
+    let ctx = canvas.getContext('2d');
+    let folderInput = document.getElementById('folder-input');
+    let fileList = document.getElementById('file-list');
+    let darkenTool = document.getElementById('darken-tool');
+    let lightenTool = document.getElementById('lighten-tool');
+    let eraserTool = document.getElementById('eraser-tool');
+    let pencilTool = document.getElementById('pencil-tool');
+    let saveBtn = document.getElementById('save-btn');
+    let colorPicker = document.getElementById('color-picker');
+
+    let currentTool = null;
+    let currentColor = '#FFFFFF';
+    let texturePixelSize = 1;
+    let textureWidth = 16; // Default to 16x16
+    let textureHeight = 16; // Default to 16x16
+
+    // Event listener for "Upload Folder" button
+    document.getElementById('upload-folder-btn').addEventListener('click', () => {
+      folderInput.click();
+    });
+
+    folderInput.addEventListener('change', handleFiles, false);
+
+    function handleFiles(event) {
+      let files = event.target.files;
+      fileList.innerHTML = '';
+      let textures = [];
+      Array.from(files).forEach(file => {
+        if (file.type === 'image/png') {
+          const fileReader = new FileReader();
+          fileReader.onload = function(e) {
+            let img = new Image();
+            img.src = e.target.result;
+            img.onload = function() {
+              textures.push(img);
+              let listItem = document.createElement('li');
+              listItem.textContent = file.name;
+              listItem.onclick = () => loadTexture(img);
+              fileList.appendChild(listItem);
+            };
+          };
+          fileReader.readAsDataURL(file);
+        }
+      });
+    }
+
+    function loadTexture(img) {
+      selectedTexture = img;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.imageSmoothingEnabled = false; // Disable image smoothing
+      ctx.drawImage(selectedTexture, 0, 0, canvas.width, canvas.height);
+
+      // Ask for texture size (8x8 or 16x16)
+      let textureSize = prompt("Enter the texture size (8x8 or 16x16):");
+      if (textureSize === "8x8") {
+        textureWidth = 8;
+        textureHeight = 8;
+        texturePixelSize = 62; // Set pixel size for 8x8 textures
+      } else if (textureSize === "16x16") {
+        textureWidth = 16;
+        textureHeight = 16;
+        texturePixelSize = 30; // Set pixel size for 16x16 textures
+      } else {
+        alert("Invalid size. Using default 16x16.");
+        textureWidth = 16;
+        textureHeight = 16;
+        texturePixelSize = 30;
+      }
+    }
+
+    darkenTool.addEventListener('mousedown', () => currentTool = 'darken');
+    lightenTool.addEventListener('mousedown', () => currentTool = 'lighten');
+    eraserTool.addEventListener('mousedown', () => currentTool = 'eraser');
+    pencilTool.addEventListener('mousedown', () => currentTool = 'pencil');
+
+    // Update current color when the color picker is changed
+    colorPicker.addEventListener('input', (e) => {
+      currentColor = e.target.value;
+    });
+
+    canvas.addEventListener('mousedown', (e) => {
+      const { offsetX, offsetY } = e;
+      const pixelX = Math.floor(offsetX / (500 / selectedTexture.width));  // Match pixel size
+      const pixelY = Math.floor(offsetY / (500 / selectedTexture.height)); // Match pixel size
+      const pixel = ctx.getImageData(pixelX * texturePixelSize, pixelY * texturePixelSize, texturePixelSize, texturePixelSize).data;
+      
+      if (currentTool === 'darken') {
+        let [r, g, b, a] = pixel;
+        if (a !== 0) {
+          ctx.fillStyle = `rgb(${Math.max(r - 30, 0)}, ${Math.max(g - 30, 0)}, ${Math.max(b - 30, 0)})`;
+          ctx.fillRect(pixelX * (500 / selectedTexture.width), pixelY * (500 / selectedTexture.height), texturePixelSize, texturePixelSize);
+        }
+      } else if (currentTool === 'lighten') {
+        let [r, g, b, a] = pixel;  // why does Feratium not like femboys
+        if (a !== 0) {
+          ctx.fillStyle = `rgb(${Math.min(r + 30, 255)}, ${Math.min(g + 30, 255)}, ${Math.min(b + 30, 255)})`;
+          ctx.fillRect(pixelX * (500 / selectedTexture.width), pixelY * (500 / selectedTexture.height), texturePixelSize, texturePixelSize);
+        }
+      } else if (currentTool === 'eraser') {
+        ctx.clearRect(pixelX * (500 / selectedTexture.width), pixelY * (500 / selectedTexture.height), texturePixelSize, texturePixelSize);
+      } else if (currentTool === 'pencil') {
+        ctx.fillStyle = currentColor;
+        ctx.fillRect(pixelX * (500 / selectedTexture.width), pixelY * (500 / selectedTexture.height), texturePixelSize, texturePixelSize);
+      }
+    });
+
+    canvas.addEventListener('mousemove', (e) => {
+      if (e.buttons === 1) {
+        const { offsetX, offsetY } = e;
+        const pixelX = Math.floor(offsetX / (500 / selectedTexture.width));
+        const pixelY = Math.floor(offsetY / (500 / selectedTexture.height));
+        if (currentTool === 'pencil') {
+          ctx.fillStyle = currentColor;
+          ctx.fillRect(pixelX * (500 / selectedTexture.width), pixelY * (500 / selectedTexture.height), texturePixelSize, texturePixelSize);
+        }
+      }
+    });
+
+    saveBtn.addEventListener('click', () => {
+      if (!selectedTexture) return;
+
+      // Resize the canvas to the selected texture size
+      let tempCanvas = document.createElement('canvas');
+      let tempCtx = tempCanvas.getContext('2d');
+      tempCanvas.width = textureWidth;
+      tempCanvas.height = textureHeight;
+
+      // Draw the texture to the temp canvas, resizing it to the selected size
+      tempCtx.drawImage(canvas, 0, 0, textureWidth, textureHeight);
+
+      // Create a data URL from the temp canvas
+      const dataUrl = tempCanvas.toDataURL('image/png');
+      const link = document.createElement('a');
+      link.href = dataUrl;
+      link.download = selectedTexture.src.split('/').pop();
+      link.click();
+    });
+    
+    let customColors = [];
+let customColorsContainer = document.getElementById('custom-colors');
+let colorInput = document.getElementById('color-input');
+let addColorBtn = document.getElementById('add-color-btn');
+
+addColorBtn.addEventListener('click', () => {
+  if (customColors.length >= 15) {
+    alert('You can only add up to 15 custom colors.');
+    return;
+  }
+
+  let color = colorInput.value;
+  if (!customColors.includes(color)) {
+    customColors.push(color);
+    updateCustomColors();
+  } else {
+    alert('This color is already in the palette.');
+  }
+});
+
+customColorsContainer.addEventListener('contextmenu', (e) => e.preventDefault()); // Disable default right-click menu on the palette
+
+function updateCustomColors() {
+  customColorsContainer.innerHTML = ''; // Clear previous colors
+
+  customColors.forEach((color, index) => {
+    let colorBox = document.createElement('div');
+    colorBox.className = 'color-box';
+    colorBox.style.backgroundColor = color;
+
+    // Left-click: Set pencil tool's color
+    colorBox.onclick = () => {
+      currentColor = color; // Set pencil tool's color
+      colorPicker.value = color; // Sync with color picker
+    };
+
+    // Right-click: Remove color from the palette
+    colorBox.oncontextmenu = (e) => {
+      e.preventDefault(); // Prevent the default right-click menu
+      customColors.splice(index, 1); // Remove color from the array
+      updateCustomColors(); // Update the palette display
+    };
+
+    customColorsContainer.appendChild(colorBox);
+  });
+}
+
+// Eyedropper Tool Implementation
+let eyedropperTool = document.getElementById('eyedropper-tool');
+
+eyedropperTool.addEventListener('mousedown', () => currentTool = 'eyedropper');
+
+canvas.addEventListener('click', (e) => {
+  if (currentTool === 'eyedropper') {
+    const { offsetX, offsetY } = e;
+    const pixelData = ctx.getImageData(offsetX, offsetY, 1, 1).data; // Get the pixel color
+    const [r, g, b] = pixelData;
+
+    // Convert RGB to hex
+    currentColor = `#${((1 << 24) | (r << 16) | (g << 8) | b).toString(16).slice(1)}`;
+    colorPicker.value = currentColor; // Update the color picker value
+  }
+});
+
+  </script>
+</body>
+</html>
