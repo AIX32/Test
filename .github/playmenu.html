@@ -80,57 +80,143 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(8px);
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
             display: none;
             z-index: 10;
         }
 
-        .setting-option {
-            margin: 20px;
-            padding: 10px;
-            color: #ddd;
-            font-size: 18px;
-            cursor: pointer;
-            border: 2px solid #444;
-            border-radius: 8px;
-            width: 250px;
-            text-align: center;
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        #settings-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 30px;
+            animation: fadeIn 0.3s ease-out;
         }
 
-        .setting-option:hover {
-            background-color: #444;
-            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
+
+#settings-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 30px;
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.setting-option {
+    margin: 0;
+    padding: 25px;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    border: 2px solid #444;
+    border-radius: 15px;
+    text-align: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: none;
+    box-shadow: none;
+}
+
+.setting-option i {
+    font-size: 36px;
+    margin-bottom: 15px;
+    color: #ff7a00;
+    transition: all 0.3s ease;
+}
+
+.setting-option .description {
+    font-size: 14px;
+    color: #aaa;
+    margin-top: 12px;
+    transition: all 0.3s ease;
+}
+
+.setting-option:hover {
+    transform: translateY(-5px);
+    box-shadow: none;
+    border-color: #ff7a00;
+}
+
+.setting-option:hover i {
+    color: #ff9a30;
+    transform: scale(1.1);
+}
+
+.setting-option:hover .description {
+    color: #ccc;
+}
+
+.setting-option:active {
+    transform: scale(0.98);
+    box-shadow: none;
+}
+
 
         #drag-button {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            background-color: #333;
-            color: #fff;
-            border: none;
+            bottom: 25px;
+            right: 25px;
+            width: 65px;
+            height: 65px;
+            background: linear-gradient(145deg, #3a3a3a, #2a2a2a);
+            color: #ff7a00;
+            border: 2px solid #444;
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: grab;
             z-index: 20;
-            transition: transform 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 26px;
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3),
+                      -5px -5px 15px rgba(255, 255, 255, 0.02);
         }
 
         #drag-button:active {
             cursor: grabbing;
+            transform: scale(0.95);
+            box-shadow: inset 5px 5px 10px rgba(0, 0, 0, 0.3),
+                      inset -5px -5px 10px rgba(255, 255, 255, 0.02);
         }
 
         #drag-button:hover {
-            transform: scale(1.2);
+            transform: scale(1.1) rotate(90deg);
+            box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.4),
+                      -8px -8px 20px rgba(255, 255, 255, 0.03);
+            color: #ff9a30;
+            border-color: #ff7a00;
+        }
+
+        #fps-ping-display {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            color: #fff;
+            font-size: 14px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px 15px;
+            border-radius: 10px;
+            border: 1px solid #444;
+            display: none;
+            z-index: 100;
+            backdrop-filter: blur(5px);
         }
 
         /* Coordinate Saver Modal */
@@ -255,6 +341,37 @@
     text-align: left;
 }
 
+#drag-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    background: none;
+    color: #ff7a00;
+    border: 2px solid #444;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: grab;
+    z-index: 20;
+    transition: all 0.3s ease;
+    font-size: 24px;
+    box-shadow: none;
+}
+
+#drag-button:active {
+    cursor: grabbing;
+    transform: scale(0.95);
+    box-shadow: none;
+}
+
+#drag-button:hover {
+    transform: scale(1.1);
+    box-shadow: none;
+    color: #ff9a30;
+}
   </style>
  </head>
  <body>
@@ -276,29 +393,34 @@
   </div>
   <!-- Settings -->
   <div id="settings">
-   <div class="setting-option" id="dark-mode-toggle">
-    Toggle Dark Mode
-   </div>
-   <div class="setting-option" id="coordinate-saver-toggle">
-    Coordinate Saver
-   </div>
-   <div class="setting-option" id="resolution-toggle">
-    Toggle FPS Boost
-   </div>  
-   <div class="setting-option" id="fps-ping-toggle">
-    Toggle Performance Stats
-   </div>
-   <div class="setting-option" id="close-settings">
-    Close Settings
-   </div>
-   <!-- Inside the #settings div -->
-
-<div id="fps-ping-display" style="position: fixed; top: 10px; left: 10px; color: #fff; font-size: 14px; display: none; z-index: 100;">
-    <div id="fps-display">FPS: Calculating...</div>
-    <div id="ping-display">Ping: Calculating...</div>
-</div>
-
-  </div>
+            <div id="settings-grid">
+                <div class="setting-option" id="dark-mode-toggle">
+                    <i class="fas fa-moon"></i>
+                    Dark Mode
+                    <span class="description">Toggle dark/light theme</span>
+                </div>
+                <div class="setting-option" id="fps-ping-toggle">
+                    <i class="fas fa-tachometer-alt"></i>
+                    FPS/Ping
+                    <span class="description">Show performance metrics</span>
+                </div>
+                <div class="setting-option" id="coordinate-saver-toggle">
+                    <i class="fas fa-map-marker-alt"></i>
+                    Coordinates
+                    <span class="description">Save and manage locations</span>
+                </div>
+                <div class="setting-option" id="resolution-toggle">
+                    <i class="fas fa-compress-arrows-alt"></i>
+                    Resolution
+                    <span class="description">Adjust game resolution</span>
+                </div>
+                <div class="setting-option" id="close-settings">
+                    <i class="fas fa-times"></i>
+                    Close
+                    <span class="description">Return to game</span>
+                </div>
+            </div>
+        </div>
   <!-- Dark Mode Overlay -->
   <div class="dark-mode-overlay" id="dark-overlay">
   </div>
