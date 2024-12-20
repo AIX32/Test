@@ -62,7 +62,7 @@
         }
 
         nav ul li a:hover {
-            color: #00cc66; /* Green accent on hover */
+            color: #ff6600; /* Green accent on hover */
         }
 
         .container {
@@ -115,6 +115,37 @@
         .feature:last-child {
             margin-bottom: 0;
         }
+
+        /* Styling for the buttons */
+        .social-buttons {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .social-buttons a {
+            background-color: #333;
+            color: #fff;
+            font-size: 1.2rem;
+            padding: 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+        }
+
+        .social-buttons a:hover {
+            background-color: #ff6600; /* Green accent on hover */
+        }
+
+        .social-buttons a i {
+            margin-right: 8px;
+        }
     </style>
 </head>
 <body>
@@ -150,6 +181,13 @@
                 <p>He assisted with UI elements that A_I_X was unable to complete. Be sure to check out his project, BloxdHub.</p>
             </div>
         </div>
+    </div>
+
+    <!-- Social media buttons -->
+    <div class="social-buttons">
+        <a href="https://discord.gg/nVgUe4qrhr" target="_blank"><i class="fab fa-discord"></i> Discord</a>
+        <a href="https://bloxdforge.carrd.co" target="_blank"><i class="fas fa-globe"></i> Site</a>
+        <a href="https://www.youtube.com/@BloxdForge" target="_blank"><i class="fab fa-youtube"></i> Youtube</a>
     </div>
 </body>
 </html>
