@@ -107,37 +107,41 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-.top-right-box {
-    position: fixed;
-    top: 18px;
-    right: 14px;
-    background-color: #333;
-    padding: 15px;
-    border-radius: 20px;
-    display: flex;
-    align-items: flex-start; /* Align items to the left within the box */
-    justify-content: flex-start; /* Ensure items stick to the top */
-    z-index: 20;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
-    transition: height 0.3s ease, transform 0.3s ease; /* Smooth height and transform transitions */
-    overflow: hidden; /* To prevent overflow when transitioning */
-}
+        .iframe-container.fullscreen iframe {
+            height: 100vh;
+            border-radius: 0;
+        }
 
-.top-right-box.expanded {
-    height: 190px; /* or any height you prefer */
-}
+        .top-right-box {
+            position: fixed;
+            top: 18px;
+            right: 14px;
+            background-color: #333;
+            padding: 8px;
+            border-radius: 10px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+            z-index: 20;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+            transition: height 0.3s ease, transform 0.3s ease;
+            overflow: hidden;
+        }
 
+        .top-right-box.expanded {
+            height: 190px;
+        }
 
         .download-btn, .fullscreen-btn {
             background-color: #ff7f00;
             color: white;
             border: none;
-            padding: 15px;
+            padding: 10px;
             border-radius: 10px;
             cursor: pointer;
             font-size: 20px;
-            width: 50px;
-            height: 50px;
+            width: 40px;
+            height: 40px;
             transition: all 0.3s, box-shadow 0.3s;
             display: flex;
             justify-content: center;
@@ -151,101 +155,107 @@
             transform: scale(1.1);
         }
 
-.folder-menu-btn {
-    background-color: #ff7f00;
-    color: white;
-    border: none;
-    padding: 15px;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 20px;
-    width: 50px;
-    height: 50px;
-    transition: all 0.3s, box-shadow 0.3s;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    margin-left: 5px; /* Add space between buttons */
+        .folder-menu-btn {
+            background-color: #ff7f00;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 20px;
+            width: 40px;
+            height: 40px;
+            transition: all 0.3s, box-shadow 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            margin-left: 5px;
+        }
+
+        .folder-menu-btn:hover {
+            background-color: #e67e00;
+            box-shadow: 0 0 20px #e67e00;
+            transform: scale(1.1);
+        }
+
+        .top-right-box img {
+            width: 46%;
+            height: 42px;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        
+        .top-right-box {
+    transition: height 0.3s ease, transform 0.3s ease;
 }
 
-.folder-menu-btn:hover {
-    background-color: #e67e00;
-    box-shadow: 0 0 20px #e67e00;
-    transform: scale(1.1);
+.top-right-box.fullscreen {
+    transform: scale(0.8) translateX(60px); /* Shrink and move to the left */
+    right: 50px; /* Adjust position further to the left */
 }
 
 
+        #folder-menu {
+            display: none;
+            position: flex;
+            top: 400px;
+            right: 20px;
+            background-color: #ff7f00;
+            padding: 15px;
+            border-radius: 10px;
+            z-index: 30;
+            width: 12.6%; 
+            overflow-y: auto;
+        }
 
-.top-right-box img {
-    width: 100px; /* Adjust size as needed */
-    height: auto;
-    border-radius: 5px;
-    margin-right: 10px;
-}
+        #folder-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
 
-    #folder-menu {
-        display: none;
-        position: flex;
-        top: 400px;
-        right: 20px;
-        background-color: #ff7f00;
-        padding: 15px;
-        border-radius: 10px;
-        z-index: 30;
-        width: 200px; 
-        overflow-y: auto;
-    }
+        #folder-container div {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            width: 80px;
+            height: 80px;
+            background-color: #555;
+            color: white;
+            border-radius: 5px;
+            cursor: grab;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
 
-    /* Folder Button Styling */
-    #folder-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-    }
+        #folder-container div:hover {
+            background-color: #ff7f00; 
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            transform: scale(1.02);
+        }
 
-    #folder-container div {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-        width: 80px;
-        height: 80px;
-        background-color: #555;
-        color: white;
-        border-radius: 5px;
-        cursor: grab;
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-        text-align: center;
-        font-size: 14px;
-        transition: all 0.2s ease;
-    }
+        #upload-folder-btn {
+            background-color: #ff7f00;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            width: 100%;
+            text-align: center;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
 
-    #folder-container div:hover {
-        background-color: #ff7f00; 
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-        transform: scale(1.02);
-    }
-
-    /* Folder Menu Upload Button */
-    #upload-folder-btn {
-        background-color: #ff7f00;
-        color: white;
-        border: none;
-        padding: 10px;
-        border-radius: 5px;
-        cursor: pointer;
-        margin-bottom: 10px;
-        width: 100%;
-        text-align: center;
-        font-size: 14px;
-        transition: all 0.3s ease;
-    }
-
-    #upload-folder-btn:hover {
-        background-color: #e67e00;
-        box-shadow: 0 0 20px #e67e00;
-    }
+        #upload-folder-btn:hover {
+            background-color: #e67e00;
+            box-shadow: 0 0 20px #e67e00;
+        }
     </style>
 </head>
 <body>
@@ -282,23 +292,23 @@
         </div>
     </div>
 
-<div class="top-right-box">
-    <img src="https://i.imgur.com/ph4qDah.png" alt="Bloxd Forge Logo" />
-    <button class="fullscreen-btn" onclick="toggleFullScreen()">
-        <i class="fas fa-expand"></i>
-    </button>
-    <button class="folder-menu-btn" onclick="toggleFolderMenu()">
-        <i class="fas fa-folder"></i>
-    </button>
-</div>
+    <div class="top-right-box">
+        <img src="https://i.imgur.com/ph4qDah.png" alt="Bloxd Forge Logo" />
+        <button class="fullscreen-btn" onclick="toggleFullScreen()">
+            <i class="fas fa-expand"></i>
+        </button>
+        <button class="folder-menu-btn" onclick="toggleFolderMenu()">
+            <i class="fas fa-folder"></i>
+        </button>
+    </div>
 
-<div id="folder-menu" style="display: none; position: fixed; top: 70px; right: 20px; background-color: #444; padding: 15px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); z-index: 30;">
-    <input type="file" id="folder-input" style="display: none;" webkitdirectory multiple />
-    <button id="upload-folder-btn" onclick="document.getElementById('folder-input').click()" style="background-color: #ff7f00; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; margin-bottom: 10px;">
-        Upload Folder
-    </button>
-    <div id="folder-container" style="display: flex; flex-wrap: wrap; gap: 10px;"></div>
-</div>
+    <div id="folder-menu" style="display: none; position: fixed; top: 70px; right: 20px; background-color: #444; padding: 15px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); z-index: 30;">
+        <input type="file" id="folder-input" style="display: none;" webkitdirectory multiple />
+        <button id="upload-folder-btn" onclick="document.getElementById('folder-input').click()" style="background-color: #ff7f00; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; margin-bottom: 10px;">
+            Upload Folder
+        </button>
+        <div id="folder-container" style="display: flex; flex-wrap: wrap; gap: 10px;"></div>
+    </div>
 
     <script>
         const pages = {
@@ -327,132 +337,124 @@
             loadPage(page);
         }
 
-        function toggleFullScreen() {
-            const sidebar = document.querySelector('.sidebar');
-            const content = document.querySelector('.content');
-            const isHidden = sidebar.classList.contains('hidden');
+function toggleFullScreen() {
+    const sidebar = document.querySelector('.sidebar');
+    const content = document.querySelector('.content');
+    const topRightBox = document.querySelector('.top-right-box');
+    const isHidden = sidebar.classList.contains('hidden');
 
-            if (!isHidden) {
-                sidebar.classList.add('hidden');
-                content.classList.add('fullscreen');
-            } else {
-                sidebar.classList.remove('hidden');
-                content.classList.remove('fullscreen');
+    if (!isHidden) {
+        sidebar.classList.add('hidden');
+        content.classList.add('fullscreen');
+        topRightBox.classList.add('fullscreen'); // Add fullscreen class to the corner box
+    } else {
+        sidebar.classList.remove('hidden');
+        content.classList.remove('fullscreen');
+        topRightBox.classList.remove('fullscreen'); // Remove fullscreen class from the corner box
+    }
+}
+
+
+
+        const folderMenu = document.getElementById('folder-menu');
+        const folderContainer = document.getElementById('folder-container');
+        const folderInput = document.getElementById('folder-input');
+
+        function toggleFolderMenu() {
+            const folderMenu = document.getElementById('folder-menu');
+            const topRightBox = document.querySelector('.top-right-box');
+            
+            // Toggle folder menu visibility
+            folderMenu.style.display = folderMenu.style.display === 'none' ? 'block' : 'none';
+            
+            // Toggle the height of the top-right box
+            topRightBox.classList.toggle('expanded');
+        }
+
+        // Add Folder Icon
+        function addFolderIcon(name) {
+            const folderDiv = document.createElement('div');
+            folderDiv.textContent = name;
+            folderDiv.draggable = true;
+            folderDiv.style.cssText = ` 
+                display: flex; 
+                align-items: center; 
+                justify-content: center; 
+                flex-direction: column; 
+                width: 80px; 
+                height: 80px; 
+                background-color: #555; 
+                color: white; 
+                border-radius: 5px; 
+                cursor: grab; 
+                box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+            `;
+
+            // Enable dragging
+            folderDiv.addEventListener('dragstart', (e) => {
+                e.dataTransfer.setData('text/plain', name);
+            });
+
+            // Make folderDiv clickable to open folder input dialog
+            folderDiv.addEventListener('click', () => {
+                folderInput.click(); // Trigger file/folder selection when clicked
+            });
+
+            // Add contextmenu (right-click) event to remove folder
+            folderDiv.addEventListener('contextmenu', (e) => {
+                e.preventDefault(); // Prevent the default right-click menu
+                removeFolder(folderDiv, name); // Remove the folder
+            });
+
+            folderContainer.appendChild(folderDiv);
+        }
+
+        // Save folders to localStorage
+        function saveFolders(folders) {
+            localStorage.setItem('savedFolders', JSON.stringify(folders));
+        }
+
+        // Load folders from localStorage
+        function loadFolders() {
+            const savedFolders = JSON.parse(localStorage.getItem('savedFolders'));
+            if (savedFolders && savedFolders.length > 0) {
+                savedFolders.forEach(folder => {
+                    addFolderIcon(folder);
+                });
             }
         }
-        
-    const folderMenu = document.getElementById('folder-menu');
-    const folderContainer = document.getElementById('folder-container');
-    const folderInput = document.getElementById('folder-input');
 
-function toggleFolderMenu() {
-    const folderMenu = document.getElementById('folder-menu');
-    const topRightBox = document.querySelector('.top-right-box');
-    
-    // Toggle folder menu visibility
-    folderMenu.style.display = folderMenu.style.display === 'none' ? 'block' : 'none';
-    
-    // Toggle the height of the top-right box
-    topRightBox.classList.toggle('expanded');
-}
+        // Remove Folder
+        function removeFolder(folderDiv, folderName) {
+            // Remove the folder from the UI
+            folderDiv.remove();
 
-    // Add Folder Icon
-    function addFolderIcon(name) {
-        const folderDiv = document.createElement('div');
-        folderDiv.textContent = name;
-        folderDiv.draggable = true;
-        folderDiv.style.cssText = ` 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            flex-direction: column; 
-            width: 80px; 
-            height: 80px; 
-            background-color: #555; 
-            color: white; 
-            border-radius: 5px; 
-            cursor: grab; 
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-        `;
-
-        // Enable dragging
-        folderDiv.addEventListener('dragstart', (e) => {
-            e.dataTransfer.setData('text/plain', name);
-        });
-
-        // Make folderDiv clickable to open folder input dialog
-        folderDiv.addEventListener('click', () => {
-            folderInput.click(); // Trigger file/folder selection when clicked
-        });
-
-        // Add contextmenu (right-click) event to remove folder
-        folderDiv.addEventListener('contextmenu', (e) => {
-            e.preventDefault(); // Prevent the default right-click menu
-            removeFolder(folderDiv, name); // Remove the folder
-        });
-
-        folderContainer.appendChild(folderDiv);
-    }
-
-    // Save folders to localStorage
-    function saveFolders(folders) {
-        localStorage.setItem('savedFolders', JSON.stringify(folders));
-    }
-
-    // Load folders from localStorage
-    function loadFolders() {
-        const savedFolders = JSON.parse(localStorage.getItem('savedFolders'));
-        if (savedFolders && savedFolders.length > 0) {
-            savedFolders.forEach(folder => {
-                addFolderIcon(folder);
-            });
-        }
-    }
-
-    // Remove Folder
-    function removeFolder(folderDiv, folderName) {
-        // Remove the folder from the UI
-        folderDiv.remove();
-
-        // Get the current saved folders from localStorage
-        let savedFolders = JSON.parse(localStorage.getItem('savedFolders')) || [];
-
-        // Remove the folder from the savedFolders array
-        savedFolders = savedFolders.filter(folder => folder !== folderName);
-
-        // Save the updated list of folders back to localStorage
-        saveFolders(savedFolders);
-    }
-
-    // Handle Folder Input Change
-    folderInput.addEventListener('change', (event) => {
-        const files = event.target.files;
-        if (files.length > 0) {
-            const folderName = files[0].webkitRelativePath.split('/')[0]; // Use the folder name from the first file
-            addFolderIcon(folderName);
-
-            // Save the new folder to localStorage
+            // Get the current saved folders from localStorage
             let savedFolders = JSON.parse(localStorage.getItem('savedFolders')) || [];
-            savedFolders.push(folderName);
+
+            // Remove the folder from the savedFolders array
+            savedFolders = savedFolders.filter(folder => folder !== folderName);
+
+            // Save the updated list of folders back to localStorage
             saveFolders(savedFolders);
         }
-    });
 
-    // Load folders on page load
-    window.addEventListener('load', loadFolders);
+        // Handle Folder Input Change
+        folderInput.addEventListener('change', (event) => {
+            const files = event.target.files;
+            if (files.length > 0) {
+                const folderName = files[0].webkitRelativePath.split('/')[0]; // Use the folder name from the first file
+                addFolderIcon(folderName);
 
-function toggleFolderMenu() {
-    const folderMenu = document.getElementById('folder-menu');
-    const topRightBox = document.querySelector('.top-right-box');
-    
-    // Toggle folder menu visibility
-    folderMenu.style.display = folderMenu.style.display === 'none' ? 'block' : 'none';
-    
-    // Toggle the height of the top-right box
-    topRightBox.classList.toggle('expanded');
-}
+                // Save the new folder to localStorage
+                let savedFolders = JSON.parse(localStorage.getItem('savedFolders')) || [];
+                savedFolders.push(folderName);
+                saveFolders(savedFolders);
+            }
+        });
 
-
+        // Load folders on page load
+        window.addEventListener('load', loadFolders);
     </script>
 </body>
 </html>
