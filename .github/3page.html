@@ -208,6 +208,7 @@ canvas {
     <canvas id="canvas" width="500" height="500"></canvas>
   </div>
   <div id="toolbar">
+    <button id="undo-btn">Undo</button>
     <button id="darken-tool">Darken</button>
     <button id="lighten-tool">Lighten</button>
     <button id="eraser-tool">Eraser</button>
@@ -426,6 +427,77 @@ canvas.addEventListener('click', (e) => {
     // Convert RGB to hex
     currentColor = `#${((1 << 24) | (r << 16) | (g << 8) | b).toString(16).slice(1)}`;
     colorPicker.value = currentColor; // Update the color picker value
+  }
+});
+
+let undoStack = []; // Stack to store actions for undo
+let redoStack = []; // Stack to store undone actions (for future redo feature, if needed)
+
+// Function to track the last action (store pixel data and position)
+function trackAction(action) {
+  undoStack.push(action);
+}
+
+// Event listener for "Undo" button
+document.getElementById('undo-btn').addEventListener('click', () => {
+  if (undoStack.length > 0) {
+    let lastAction = undoStack.pop(); // Get the last action
+    redoStack.push(lastAction); // Push it to the redo stack if needed
+
+    // Redraw the canvas after undo
+    redrawCanvas();
+  }
+});
+
+// Redraw the entire canvas based on the undo stack
+function redrawCanvas() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
+
+  // Redraw the texture and apply all actions except the last one
+  ctx.drawImage(selectedTexture, 0, 0, canvas.width, canvas.height);
+
+  // Reapply all actions in the undo stack
+  undoStack.forEach(action => {
+    ctx.fillStyle = action.color;
+    ctx.fillRect(action.x, action.y, texturePixelSize, texturePixelSize);
+  });
+}
+
+// Modify the pencil and eraser tool logic to track actions
+canvas.addEventListener('mousedown', (e) => {
+  const { offsetX, offsetY } = e;
+  const pixelX = Math.floor(offsetX / (500 / selectedTexture.width));
+  const pixelY = Math.floor(offsetY / (500 / selectedTexture.height));
+  const x = pixelX * (500 / selectedTexture.width);
+  const y = pixelY * (500 / selectedTexture.height);
+  const pixel = ctx.getImageData(x, y, texturePixelSize, texturePixelSize).data;
+
+  // Track pixel data for undo (only if it's a pencil or eraser action)
+  if (currentTool === 'pencil' || currentTool === 'eraser') {
+    const action = { x, y, color: currentColor };
+    trackAction(action);
+  }
+
+  if (currentTool === 'pencil') {
+    ctx.fillStyle = currentColor;
+    ctx.fillRect(x, y, texturePixelSize, texturePixelSize);
+  } else if (currentTool === 'eraser') {
+    ctx.clearRect(x, y, texturePixelSize, texturePixelSize);
+  }
+});
+
+canvas.addEventListener('mousemove', (e) => {
+  if (e.buttons === 1) {
+    const { offsetX, offsetY } = e;
+    const pixelX = Math.floor(offsetX / (500 / selectedTexture.width));
+    const pixelY = Math.floor(offsetY / (500 / selectedTexture.height));
+    const x = pixelX * (500 / selectedTexture.width);
+    const y = pixelY * (500 / selectedTexture.height);
+
+    if (currentTool === 'pencil') {
+      ctx.fillStyle = currentColor;
+      ctx.fillRect(x, y, texturePixelSize, texturePixelSize);
+    }
   }
 });
 
