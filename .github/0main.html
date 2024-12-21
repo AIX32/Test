@@ -191,8 +191,8 @@
 }
 
 .top-right-box.fullscreen {
-    transform: scale(0.8) translateX(60px); /* Shrink and move to the left */
-    right: 50px; /* Adjust position further to the left */
+    transform: scale(0.8) translateX(60px); 
+    right: 50px; 
 }
 
 
@@ -287,9 +287,12 @@
     </div>
 
     <div class="content">
-        <div class="iframe-container">
-            <iframe name="iframe" src="about:blank"></iframe>
-        </div>
+     <div class="iframe-container" id="start-iframe-container">
+        <iframe name="start-iframe" src="https://raw.githack.com/AIX32/BloxdForge-Files/main/.github/1page.html"></iframe>
+    </div>
+    </div>
+        <div class="iframe-container" id="dynamic-iframe-container">
+        <iframe name="iframe" src="https://raw.githack.com/AIX32/BloxdForge-Files/main/start.html"></iframe>
     </div>
 
     <div class="top-right-box">
@@ -311,14 +314,13 @@
     </div>
 
     <script>
-        const pages = {
-            page1: 'https://raw.githack.com/AIX32/BloxdForge-Files/main/.github/1page.html',
-            page2: 'https://raw.githack.com/AIX32/BloxdForge-Files/main/.github/2page.html',
-            page3: 'https://raw.githack.com/AIX32/BloxdForge-Files/main/.github/3page.html',
-            page4: 'https://raw.githack.com/AIX32/BloxdForge-Files/main/.github/4page.html',
-            page5: 'https://raw.githack.com/AIX32/BloxdForge-Files/main/.github/5page.html',
-            page6: 'https://raw.githack.com/AIX32/BloxdForge-Files/main/.github/6page.html',
-        };
+    const pages = {
+        page2: 'https://raw.githack.com/AIX32/BloxdForge-Files/main/.github/2page.html',
+        page3: 'https://raw.githack.com/AIX32/BloxdForge-Files/main/.github/3page.html',
+        page4: 'https://raw.githack.com/AIX32/BloxdForge-Files/main/.github/4page.html',
+        page5: 'https://raw.githack.com/AIX32/BloxdForge-Files/main/.github/5page.html',
+        page6: 'https://raw.githack.com/AIX32/BloxdForge-Files/main/.github/6page.html',
+    };
 
         function loadPage(pageName) {
             const iframe = document.querySelector('iframe');
@@ -330,12 +332,23 @@
                 .catch(error => console.error('Error loading page:', error));
         }
 
-        function setActiveLink(link, page) {
-            const links = document.querySelectorAll('.sidebar-link');
-            links.forEach(l => l.classList.remove('selected'));
-            link.classList.add('selected');
+    function setActiveLink(link, page) {
+        const links = document.querySelectorAll('.sidebar-link');
+        const startContainer = document.getElementById('start-iframe-container');
+        const dynamicContainer = document.getElementById('dynamic-iframe-container');
+
+        links.forEach(l => l.classList.remove('selected'));
+        link.classList.add('selected');
+
+        if (page === 'page1') {
+            startContainer.style.display = 'block'; // Show Start iframe
+            dynamicContainer.style.display = 'none'; // Hide dynamic iframe
+        } else {
+            startContainer.style.display = 'none'; // Hide Start iframe
+            dynamicContainer.style.display = 'block'; // Show dynamic iframe
             loadPage(page);
         }
+    }
 
 function toggleFullScreen() {
     const sidebar = document.querySelector('.sidebar');
@@ -453,6 +466,15 @@ function toggleFullScreen() {
             }
         });
 
+    function loadPage(pageName) {
+        const iframe = document.querySelector('#dynamic-iframe-container iframe');
+        fetch(pages[pageName])
+            .then(response => response.text())
+            .then(data => {
+                iframe.srcdoc = data;
+            })
+            .catch(error => console.error('Error loading page:', error));
+    }
         // Load folders on page load
         window.addEventListener('load', loadFolders);
     </script>
