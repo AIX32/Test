@@ -337,13 +337,8 @@
         };
 
         function loadPage(pageName) {
-            const iframe = document.querySelector('iframe');
-            fetch(pages[pageName])
-                .then(response => response.text())
-                .then(data => {
-                    iframe.srcdoc = data;
-                })
-                .catch(error => console.error('Error loading page:', error));
+            const iframe = document.querySelector('iframe[name="iframe"]');
+            iframe.src = pages[pageName];
         }
 
         function setActiveLink(link, page) {

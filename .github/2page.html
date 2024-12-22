@@ -181,16 +181,17 @@
             try {
                 const response = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents`);
                 const files = await response.json();
+                const zipFiles = files.filter(file => file.type === "file" && file.name.endsWith(".zip"));
 
-                for (const file of files) {
-                    if (file.type === "file" && file.name.endsWith(".zip")) {
-                        const zipUrl = file.download_url;
-                        const zipName = file.name.replace(/\\.zip$/i, "");
+                const zipPromises = zipFiles.map(async file => {
+                    const zipUrl = file.download_url;
+                    const zipName = file.name.replace(/\.zip$/i, "");
+                    const bannerUrl = await extractBanner(zipUrl);
+                    return { zipName, zipUrl, bannerUrl };
+                });
 
-                        const bannerUrl = await extractBanner(zipUrl);
-                        displayCard(zipName, zipUrl, bannerUrl);
-                    }
-                }
+                const zipData = await Promise.all(zipPromises);
+                zipData.forEach(({ zipName, zipUrl, bannerUrl }) => displayCard(zipName, zipUrl, bannerUrl));
             } catch (error) {
                 console.error("Error fetching files:", error);
             }

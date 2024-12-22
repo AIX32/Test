@@ -206,12 +206,15 @@
       allData = [];
       container.innerHTML = '';
 
-      for (let fileUrl of fileUrls) {
+      const filePromises = fileUrls.map(async fileUrl => {
         const fileName = fileUrl.split("/").pop();
         const data = await fetchFileContent(fileUrl, fileName);
-        allData.push(data);
-        createCard(data);
-      }
+        return data;
+      });
+
+      const fileData = await Promise.all(filePromises);
+      allData = fileData;
+      fileData.forEach(data => createCard(data));
     }
 
     function createCard(data) {
