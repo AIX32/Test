@@ -5,246 +5,240 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Materialize - TPack Editor</title>
   <style>
-body {
-  font-family: Arial, sans-serif;
-  display: flex;
-  height: 100vh;
-  margin: 0;
-  background-color: #333;
-  color: #fff;
-}
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      height: 100vh;
+      margin: 0;
+      background-color: #181818;
+      color: #fff;
+    }
 
-body.blurred {
-  filter: blur(5px); /* Apply blur effect */
-}
+    body.blurred {
+      filter: blur(5px);
+    }
 
-#sidebar {
-  width: 200px;
-  background-color: #222;
-  padding: 10px;
-  overflow-y: auto;
-  border-radius: 10px; /* Added rounded corners */
-}
+    #sidebar {
+      width: 200px;
+      background-color: #222;
+      padding: 10px;
+      overflow-y: auto;
+      border-radius: 10px;
+    }
 
-#sidebar ul {
-  list-style-type: none;
-  padding: 0;
-}
+    #sidebar ul {
+      list-style-type: none;
+      padding: 0;
+    }
 
-#sidebar li {
-  padding: 5px;
-  cursor: pointer;
-  border-radius: 5px; /* Added rounded corners */
-}
+    #sidebar li {
+      padding: 5px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
 
-#sidebar li:hover {
-  background-color: #444;
-}
+    #sidebar li:hover {
+      background-color: #444;
+    }
 
-#canvas-container {
-  flex-grow: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10px;
-  background-color: #111;
-  border-radius: 10px; /* Added rounded corners */
-}
+    #canvas-container {
+      flex-grow: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10px;
+      background-color: #111;
+      border-radius: 10px;
+    }
 
-canvas {
-  border: 1px solid #fff;
-  cursor: crosshair;
-  border-radius: 5px; /* Added rounded corners */
-}
+    canvas {
+      border: 1px solid #fff;
+      cursor: crosshair;
+      border-radius: 5px;
+    }
 
-#toolbar {
-  width: 200px;
-  background-color: #222;
-  padding: 10px;
-  color: #fff;
-  border-radius: 10px; /* Added rounded corners */
-}
+    #toolbar {
+      width: 200px;
+      background-color: #222;
+      padding: 10px;
+      color: #fff;
+      border-radius: 10px;
+    }
 
-#toolbar button {
-  width: 100%;
-  padding: 10px;
-  margin: 5px 0;
-  color: #fff;
-  background-color: #444;
-  border: none;
-  cursor: pointer;
-  transition-duration: 0.2s;
-  border-radius: 5px; /* Added rounded corners */
-}
+    #toolbar button {
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0;
+      color: #fff;
+      background-color: #444;
+      border: none;
+      cursor: pointer;
+      transition-duration: 0.2s;
+      border-radius: 5px;
+    }
 
-#toolbar button:hover {
-  background-color: #555;
-}
+    #toolbar button:hover {
+      background-color: #555;
+    }
 
-#save-btn {
-  background-color: #5ed267;
-}
+    #save-btn {
+      background-color: #5ed267;
+    }
 
-#save-btn:hover {
-  background-color: #218838;
-}
+    #save-btn:hover {
+      background-color: #218838;
+    }
 
-#upload-folder-btn {
-  width: 100%;
-  padding: 10px;
-  margin: 5px 0;
-  background-color: #ff7f00; /* Orange color */
-  border: none;
-  cursor: pointer;
-  transition-duration: 0.2s;
-  border-radius: 5px; /* Added rounded corners */
-}
+    #upload-folder-btn {
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0;
+      background-color: #FFA500;
+      border: none;
+      cursor: pointer;
+      transition-duration: 0.2s;
+      border-radius: 5px;
+    }
 
-#upload-folder-btn:hover {
-  background-color: #e67300; /* Darker orange on hover */
-}
+    #upload-folder-btn:hover {
+      background-color: #e67300;
+    }
 
-#color-picker {
-  background-color: #444;
-  width: 100%;
-  height: 45px;
-  padding: 5px;
-  margin-top: 10px;
-  outline: none;
-  transition-duration: 0.2s;
-  border-radius: 5px; /* Added rounded corners */
-}
+    #color-picker {
+      background-color: #444;
+      width: 100%;
+      height: 45px;
+      padding: 5px;
+      margin-top: 10px;
+      outline: none;
+      transition-duration: 0.2s;
+      border-radius: 5px;
+    }
 
-#color-picker:hover {
-  background-color: #555;
-  width: 100%;
-  height: 45px;
-  padding: 5px;
-  margin-top: 10px;
-  outline: none;
-  border-radius: 5px; /* Added rounded corners */
-}
+    #color-picker:hover {
+      background-color: #555;
+      width: 100%;
+      height: 45px;
+      padding: 5px;
+      margin-top: 10px;
+      outline: none;
+      border-radius: 5px;
+    }
 
-#color-palette {
-  margin-top: 20px;
-  text-align: center;
-}
+    #color-palette {
+      margin-top: 20px;
+      text-align: center;
+    }
 
-#custom-colors {
-  display: flex;
-  flex-direction: column; /* Stack items vertically */
-  align-items: center;
-  flex-wrap: wrap;
-  margin-top: 10px;
-  gap: 5px;
-}
+    #custom-colors {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 10px;
+      gap: 5px;
+    }
 
-#custom-colors .color-box {
-  width: 30px;
-  height: 30px;
-  cursor: pointer;
-  border: 2px solid #555;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-  border-radius: 5px; /* Added rounded corners */
-}
+    #custom-colors .color-box {
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      border: 2px solid #555;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+      border-radius: 5px;
+    }
 
-#custom-colors .color-box:hover {
-  border: 2px solid #fff;
-}
+    #custom-colors .color-box:hover {
+      border: 2px solid #fff;
+    }
 
-#color-input {
-  margin-top: 10px;
-  width: 80%;
-  background-color: #444;
-  border-radius: 5px; /* Added rounded corners */
-}
+    #color-input {
+      margin-top: 10px;
+      width: 80%;
+      background-color: #444;
+      border-radius: 5px;
+    }
 
-#add-color-btn {
-  margin-top: 5px;
-  width: 100%;
-  padding: 5px;
-  background-color: #444;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  transition-duration: 0.2s;
-  border-radius: 5px; /* Added rounded corners */
-}
+    #add-color-btn {
+      margin-top: 5px;
+      width: 100%;
+      padding: 5px;
+      background-color: #444;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      transition-duration: 0.2s;
+      border-radius: 5px;
+    }
 
-#add-color-btn:hover {
-  background-color: #555;
-}
+    #add-color-btn:hover {
+      background-color: #555;
+    }
 
-/* Style the scrollbar */
-::-webkit-scrollbar {
-  width: 8px; /* Width of the scrollbar */
-  border-radius: 5px; /* Added rounded corners */
-}
+    ::-webkit-scrollbar {
+      width: 8px;
+      border-radius: 5px;
+    }
 
-/* Track (the area the thumb moves along) */
-::-webkit-scrollbar-track {
-  background: #222; /* Dark background for the track */
-  border-radius: 5px; /* Added rounded corners */
-}
+    ::-webkit-scrollbar-track {
+      background: #222;
+      border-radius: 5px;
+    }
 
-/* Handle (the draggable part of the scrollbar) */
-::-webkit-scrollbar-thumb {
-  background: #555; /* Dark thumb color */
-  border-radius: 10px; /* Rounded corners for the thumb */
-  transition-duration: 0.5;
-}
+    ::-webkit-scrollbar-thumb {
+      background: #555;
+      border-radius: 10px;
+      transition-duration: 0.5;
+    }
 
-/* Optional: Change the thumb color on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #888; /* Lighter thumb color when hovered */
-}
+    ::-webkit-scrollbar-thumb:hover {
+      background: #888;
+    }
 
-#password-modal {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.9);
-  justify-content: center;
-  align-items: center;
-  color: white;
-}
+    #password-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.9);
+      justify-content: center;
+      align-items: center;
+      color: white;
+    }
 
-.modal-content {
-  background: #222;
-  padding: 20px;
-  border-radius: 10px;
-  text-align: center;
-}
+    .modal-content {
+      background: #222;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+    }
 
-#password-input {
-  padding: 10px;
-  margin: 10px;
-  border-radius: 5px;
-  outline: none;
-}
+    #password-input {
+      padding: 10px;
+      margin: 10px;
+      border-radius: 5px;
+      outline: none;
+    }
 
-#submit-password-btn {
-  padding: 10px 20px;
-  margin: 5px;
-  background-color: #ff7f00;
-  border: none;
-  color: white;
-  cursor: pointer;
-  border-radius: 5px;
-}
+    #submit-password-btn {
+      padding: 10px 20px;
+      margin: 5px;
+      background-color: #FFA500;
+      border: none;
+      color: white;
+      cursor: pointer;
+      border-radius: 5px;
+    }
 
-#error-message {
-  color: red;
-  display: none;
-}
-
+    #error-message {
+      color: red;
+      display: none;
+    }
   </style>
 </head>
 <body>
-<!-- Password Prompt Modal -->
 <div id="password-modal">
   <div class="modal-content">
     <h3>Enter Key.</h3>
@@ -282,6 +276,7 @@ canvas {
   <button id="add-color-btn">Add Color</button>
 </div>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
   <script>
     let selectedTexture = null;
     let canvas = document.getElementById('canvas');
@@ -298,10 +293,9 @@ canvas {
     let currentTool = null;
     let currentColor = '#FFFFFF';
     let texturePixelSize = 1;
-    let textureWidth = 16; // Default to 16x16
-    let textureHeight = 16; // Default to 16x16
+    let textureWidth = 16;
+    let textureHeight = 16;
 
-    // Event listener for "Upload Folder" button
     document.getElementById('upload-folder-btn').addEventListener('click', () => {
       folderInput.click();
     });
@@ -334,19 +328,18 @@ canvas {
     function loadTexture(img) {
       selectedTexture = img;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.imageSmoothingEnabled = false; // Disable image smoothing
+      ctx.imageSmoothingEnabled = false;
       ctx.drawImage(selectedTexture, 0, 0, canvas.width, canvas.height);
 
-      // Ask for texture size (8x8 or 16x16)
       let textureSize = prompt("Enter the texture size (8x8 or 16x16):");
       if (textureSize === "8x8") {
         textureWidth = 8;
         textureHeight = 8;
-        texturePixelSize = 62; // Set pixel size for 8x8 textures
+        texturePixelSize = 62;
       } else if (textureSize === "16x16") {
         textureWidth = 16;
         textureHeight = 16;
-        texturePixelSize = 30; // Set pixel size for 16x16 textures
+        texturePixelSize = 30;
       } else {
         alert("Invalid size. Using default 16x16.");
         textureWidth = 16;
@@ -360,15 +353,14 @@ canvas {
     eraserTool.addEventListener('mousedown', () => currentTool = 'eraser');
     pencilTool.addEventListener('mousedown', () => currentTool = 'pencil');
 
-    // Update current color when the color picker is changed
     colorPicker.addEventListener('input', (e) => {
       currentColor = e.target.value;
     });
 
     canvas.addEventListener('mousedown', (e) => {
       const { offsetX, offsetY } = e;
-      const pixelX = Math.floor(offsetX / (500 / selectedTexture.width));  // Match pixel size
-      const pixelY = Math.floor(offsetY / (500 / selectedTexture.height)); // Match pixel size
+      const pixelX = Math.floor(offsetX / (500 / selectedTexture.width));
+      const pixelY = Math.floor(offsetY / (500 / selectedTexture.height));
       const pixel = ctx.getImageData(pixelX * texturePixelSize, pixelY * texturePixelSize, texturePixelSize, texturePixelSize).data;
       
       if (currentTool === 'darken') {
@@ -378,7 +370,7 @@ canvas {
           ctx.fillRect(pixelX * (500 / selectedTexture.width), pixelY * (500 / selectedTexture.height), texturePixelSize, texturePixelSize);
         }
       } else if (currentTool === 'lighten') {
-        let [r, g, b, a] = pixel;  // why does Feratium not like femboys
+        let [r, g, b, a] = pixel;
         if (a !== 0) {
           ctx.fillStyle = `rgb(${Math.min(r + 30, 255)}, ${Math.min(g + 30, 255)}, ${Math.min(b + 30, 255)})`;
           ctx.fillRect(pixelX * (500 / selectedTexture.width), pixelY * (500 / selectedTexture.height), texturePixelSize, texturePixelSize);
@@ -406,16 +398,13 @@ canvas {
     saveBtn.addEventListener('click', () => {
       if (!selectedTexture) return;
 
-      // Resize the canvas to the selected texture size
       let tempCanvas = document.createElement('canvas');
       let tempCtx = tempCanvas.getContext('2d');
       tempCanvas.width = textureWidth;
       tempCanvas.height = textureHeight;
 
-      // Draw the texture to the temp canvas, resizing it to the selected size
       tempCtx.drawImage(canvas, 0, 0, textureWidth, textureHeight);
 
-      // Create a data URL from the temp canvas
       const dataUrl = tempCanvas.toDataURL('image/png');
       const link = document.createElement('a');
       link.href = dataUrl;
@@ -424,176 +413,159 @@ canvas {
     });
     
     let customColors = [];
-let customColorsContainer = document.getElementById('custom-colors');
-let colorInput = document.getElementById('color-input');
-let addColorBtn = document.getElementById('add-color-btn');
+    let customColorsContainer = document.getElementById('custom-colors');
+    let colorInput = document.getElementById('color-input');
+    let addColorBtn = document.getElementById('add-color-btn');
 
-addColorBtn.addEventListener('click', () => {
-  if (customColors.length >= 15) {
-    alert('You can only add up to 15 custom colors.');
-    return;
-  }
+    addColorBtn.addEventListener('click', () => {
+      if (customColors.length >= 15) {
+        alert('You can only add up to 15 custom colors.');
+        return;
+      }
 
-  let color = colorInput.value;
-  if (!customColors.includes(color)) {
-    customColors.push(color);
-    updateCustomColors();
-  } else {
-    alert('This color is already in the palette.');
-  }
-});
+      let color = colorInput.value;
+      if (!customColors.includes(color)) {
+        customColors.push(color);
+        updateCustomColors();
+      } else {
+        alert('This color is already in the palette.');
+      }
+    });
 
-customColorsContainer.addEventListener('contextmenu', (e) => e.preventDefault()); // Disable default right-click menu on the palette
+    customColorsContainer.addEventListener('contextmenu', (e) => e.preventDefault());
 
-function updateCustomColors() {
-  customColorsContainer.innerHTML = ''; // Clear previous colors
+    function updateCustomColors() {
+      customColorsContainer.innerHTML = '';
 
-  customColors.forEach((color, index) => {
-    let colorBox = document.createElement('div');
-    colorBox.className = 'color-box';
-    colorBox.style.backgroundColor = color;
+      customColors.forEach((color, index) => {
+        let colorBox = document.createElement('div');
+        colorBox.className = 'color-box';
+        colorBox.style.backgroundColor = color;
 
-    // Left-click: Set pencil tool's color
-    colorBox.onclick = () => {
-      currentColor = color; // Set pencil tool's color
-      colorPicker.value = color; // Sync with color picker
-    };
+        colorBox.onclick = () => {
+          currentColor = color;
+          colorPicker.value = color;
+        };
 
-    // Right-click: Remove color from the palette
-    colorBox.oncontextmenu = (e) => {
-      e.preventDefault(); // Prevent the default right-click menu
-      customColors.splice(index, 1); // Remove color from the array
-      updateCustomColors(); // Update the palette display
-    };
+        colorBox.oncontextmenu = (e) => {
+          e.preventDefault();
+          customColors.splice(index, 1);
+          updateCustomColors();
+        };
 
-    customColorsContainer.appendChild(colorBox);
-  });
-}
-
-// Eyedropper Tool Implementation
-let eyedropperTool = document.getElementById('eyedropper-tool');
-
-eyedropperTool.addEventListener('mousedown', () => currentTool = 'eyedropper');
-
-canvas.addEventListener('click', (e) => {
-  if (currentTool === 'eyedropper') {
-    const { offsetX, offsetY } = e;
-    const pixelData = ctx.getImageData(offsetX, offsetY, 1, 1).data; // Get the pixel color
-    const [r, g, b] = pixelData;
-
-    // Convert RGB to hex
-    currentColor = `#${((1 << 24) | (r << 16) | (g << 8) | b).toString(16).slice(1)}`;
-    colorPicker.value = currentColor; // Update the color picker value
-  }
-});
-
-let undoStack = []; // Stack to store actions for undo
-let redoStack = []; // Stack to store undone actions (for future redo feature, if needed)
-
-// Function to track the last action (store pixel data and position)
-function trackAction(action) {
-  undoStack.push(action);
-}
-
-// Event listener for "Undo" button
-document.getElementById('undo-btn').addEventListener('click', () => {
-  if (undoStack.length > 0) {
-    let lastAction = undoStack.pop(); // Get the last action
-    redoStack.push(lastAction); // Push it to the redo stack if needed
-
-    // Redraw the canvas after undo
-    redrawCanvas();
-  }
-});
-
-// Redraw the entire canvas based on the undo stack
-function redrawCanvas() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
-
-  // Redraw the texture and apply all actions except the last one
-  ctx.drawImage(selectedTexture, 0, 0, canvas.width, canvas.height);
-
-  // Reapply all actions in the undo stack
-  undoStack.forEach(action => {
-    ctx.fillStyle = action.color;
-    ctx.fillRect(action.x, action.y, texturePixelSize, texturePixelSize);
-  });
-}
-
-// Modify the pencil and eraser tool logic to track actions
-canvas.addEventListener('mousedown', (e) => {
-  const { offsetX, offsetY } = e;
-  const pixelX = Math.floor(offsetX / (500 / selectedTexture.width));
-  const pixelY = Math.floor(offsetY / (500 / selectedTexture.height));
-  const x = pixelX * (500 / selectedTexture.width);
-  const y = pixelY * (500 / selectedTexture.height);
-  const pixel = ctx.getImageData(x, y, texturePixelSize, texturePixelSize).data;
-
-  // Track pixel data for undo (only if it's a pencil or eraser action)
-  if (currentTool === 'pencil' || currentTool === 'eraser') {
-    const action = { x, y, color: currentColor };
-    trackAction(action);
-  }
-
-  if (currentTool === 'pencil') {
-    ctx.fillStyle = currentColor;
-    ctx.fillRect(x, y, texturePixelSize, texturePixelSize);
-  } else if (currentTool === 'eraser') {
-    ctx.clearRect(x, y, texturePixelSize, texturePixelSize);
-  }
-});
-
-canvas.addEventListener('mousemove', (e) => {
-  if (e.buttons === 1) {
-    const { offsetX, offsetY } = e;
-    const pixelX = Math.floor(offsetX / (500 / selectedTexture.width));
-    const pixelY = Math.floor(offsetY / (500 / selectedTexture.height));
-    const x = pixelX * (500 / selectedTexture.width);
-    const y = pixelY * (500 / selectedTexture.height);
-
-    if (currentTool === 'pencil') {
-      ctx.fillStyle = currentColor;
-      ctx.fillRect(x, y, texturePixelSize, texturePixelSize);
+        customColorsContainer.appendChild(colorBox);
+      });
     }
-  }
-});
 
-// Password modal
-let passwordModal = document.getElementById('password-modal');
-let passwordInput = document.getElementById('password-input');
-let submitPasswordBtn = document.getElementById('submit-password-btn');
-let errorMessage = document.getElementById('error-message');
+    let eyedropperTool = document.getElementById('eyedropper-tool');
 
-// Define the correct password
-const correctPassword = "BF#DFT4O";  // Change this to your desired password
+    eyedropperTool.addEventListener('mousedown', () => currentTool = 'eyedropper');
 
-// Show the password modal when the page loads
-window.onload = function() {
-  passwordModal.style.display = "flex"; // Show the modal
-};
+    canvas.addEventListener('click', (e) => {
+      if (currentTool === 'eyedropper') {
+        const { offsetX, offsetY } = e;
+        const pixelData = ctx.getImageData(offsetX, offsetY, 1, 1).data;
+        const [r, g, b] = pixelData;
 
-// Prevent closing unless correct password is entered
-submitPasswordBtn.addEventListener('click', function() {
-  let enteredPassword = passwordInput.value;
-  if (enteredPassword === correctPassword) {
-    passwordModal.style.display = "none";  // Hide the modal if correct password
-  } else {
-    errorMessage.style.display = "block";  // Show error message
-  }
-});
+        currentColor = `#${((1 << 24) | (r << 16) | (g << 8) | b).toString(16).slice(1)}`;
+        colorPicker.value = currentColor;
+      }
+    });
 
-// Optional: Close the modal if the user presses "Enter" after typing the password
-passwordInput.addEventListener('keydown', function(event) {
-  if (event.key === 'Enter') {
-    submitPasswordBtn.click();
-  }
-});
+    let undoStack = [];
+    let redoStack = [];
 
-function openLink() {
-  window.open('https://link-hub.net/1268796/key-for-bloxdforge-tpack', '_blank');
-}
+    function trackAction(action) {
+      undoStack.push(action);
+    }
 
+    document.getElementById('undo-btn').addEventListener('click', () => {
+      if (undoStack.length > 0) {
+        let lastAction = undoStack.pop();
+        redoStack.push(lastAction);
 
+        redrawCanvas();
+      }
+    });
+
+    function redrawCanvas() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      ctx.drawImage(selectedTexture, 0, 0, canvas.width, canvas.height);
+
+      undoStack.forEach(action => {
+        ctx.fillStyle = action.color;
+        ctx.fillRect(action.x, action.y, texturePixelSize, texturePixelSize);
+      });
+    }
+
+    canvas.addEventListener('mousedown', (e) => {
+      const { offsetX, offsetY } = e;
+      const pixelX = Math.floor(offsetX / (500 / selectedTexture.width));
+      const pixelY = Math.floor(offsetY / (500 / selectedTexture.height));
+      const x = pixelX * (500 / selectedTexture.width);
+      const y = pixelY * (500 / selectedTexture.height);
+      const pixel = ctx.getImageData(x, y, texturePixelSize, texturePixelSize).data;
+
+      if (currentTool === 'pencil' || currentTool === 'eraser') {
+        const action = { x, y, color: currentColor };
+        trackAction(action);
+      }
+
+      if (currentTool === 'pencil') {
+        ctx.fillStyle = currentColor;
+        ctx.fillRect(x, y, texturePixelSize, texturePixelSize);
+      } else if (currentTool === 'eraser') {
+        ctx.clearRect(x, y, texturePixelSize, texturePixelSize);
+      }
+    });
+
+    canvas.addEventListener('mousemove', (e) => {
+      if (e.buttons === 1) {
+        const { offsetX, offsetY } = e;
+        const pixelX = Math.floor(offsetX / (500 / selectedTexture.width));
+        const pixelY = Math.floor(offsetY / (500 / selectedTexture.height));
+        const x = pixelX * (500 / selectedTexture.width);
+        const y = pixelY * (500 / selectedTexture.height);
+
+        if (currentTool === 'pencil') {
+          ctx.fillStyle = currentColor;
+          ctx.fillRect(x, y, texturePixelSize, texturePixelSize);
+        }
+      }
+    });
+
+    let passwordModal = document.getElementById('password-modal');
+    let passwordInput = document.getElementById('password-input');
+    let submitPasswordBtn = document.getElementById('submit-password-btn');
+    let errorMessage = document.getElementById('error-message');
+
+    const correctPasswordHash = CryptoJS.SHA256("EpikPasswrd").toString();
+
+    window.onload = function() {
+      passwordModal.style.display = "flex";
+    };
+
+    submitPasswordBtn.addEventListener('click', function() {
+      let enteredPassword = passwordInput.value;
+      let enteredPasswordHash = CryptoJS.SHA256(enteredPassword).toString();
+
+      if (enteredPasswordHash === correctPasswordHash) {
+        passwordModal.style.display = "none";
+      } else {
+        errorMessage.style.display = "block";
+      }
+    });
+
+    passwordInput.addEventListener('keydown', function(event) {
+      if (event.key === 'Enter') {
+        submitPasswordBtn.click();
+      }
+    });
+
+    function openLink() {
+      window.open('https://link-hub.net/1268796/key-for-bloxdforge-tpack', '_blank');
+    }
   </script>
 </body>
 </html>

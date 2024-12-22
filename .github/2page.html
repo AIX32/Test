@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tpack Workshop</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"> <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #2a2a2a;
+            background-color: #181818;
             color: #e5e5e5;
             margin: 0;
             padding: 20px;
@@ -22,7 +22,7 @@
             max-width: 600px;
             display: flex;
             align-items: center;
-            background-color: #383838;
+            background-color: #333;
             border-radius: 5px;
             padding: 5px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
@@ -38,16 +38,16 @@
         }
         .search-bar input:focus {
             outline: none;
-            box-shadow: 0 2px 6px rgba(255, 204, 0, 0.8);
+            box-shadow: 0 2px 6px rgba(255, 165, 0, 0.8);
         }
         .search-bar .icon {
-            color: #ffcc00;
+            color: #FFA500;
             padding: 0 10px;
         }
         .info-icon {
             margin: 10px;
             cursor: pointer;
-            color: #ffcc00;
+            color: #FFA500;
             font-size: 1.5em;
         }
         .cards-container {
@@ -59,7 +59,7 @@
             max-width: 1200px;
         }
         .card {
-            background-color: #383838;
+            background-color: #333;
             border-radius: 10px;
             width: 220px;
             margin: 10px;
@@ -82,28 +82,17 @@
             padding: 10px;
             font-size: 1em;
             text-transform: capitalize;
-            color: #ffcc00;
+            color: #FFA500;
         }
         a {
             text-decoration: none;
-            color: #ffcc00;
+            color: #FFA500;
         }
 
         ::-webkit-scrollbar {
             width: 0.1px;
         }
 
-        /* Track */
-        ::-webkit-scrollbar-track {
-            background: #343434;
-        }
-
-        /* Handle */
-        ::-webkit-scrollbar-thumb {
-            background: #4C4D4D;
-        }
-
-        /* Popup styling */
         .popup {
             display: none;
             position: fixed;
@@ -116,7 +105,7 @@
             align-items: center;
         }
         .popup-content {
-            background-color: #383838;
+            background-color: #333;
             padding: 20px;
             border-radius: 10px;
             display: flex;
@@ -150,8 +139,8 @@
             margin-left: 30px;
         }
         .popup button {
-            background-color: #ffcc00;
-            color: #383838;
+            background-color: #FFA500;
+            color: #333;
             border: none;
             padding: 10px;
             font-size: 1.1em;
@@ -168,16 +157,11 @@
     </style>
 </head>
 <body>
-    <!-- Search Bar -->
     <div class="search-bar">
         <i class="fas fa-search icon"></i>
         <input id="search-input" type="text" placeholder="Search..." oninput="filterCards()">
     </div>
-
-    <!-- Cards Container -->
     <div class="cards-container" id="cards-container"></div>
-
-    <!-- Popup Modal -->
     <div class="popup" id="popup">
         <div class="popup-content">
             <div style="display: flex;">
@@ -189,10 +173,9 @@
             </div>
         </div>
     </div>
-
     <script>
-        const repoOwner = "AIX32"; // Replace with the actual GitHub username
-        const repoName = "BLOXD-FORGE"; // Replace with the actual repository name
+        const repoOwner = "AIX32";
+        const repoName = "BLOXD-FORGE";
 
         async function fetchZipFiles() {
             try {
@@ -229,7 +212,7 @@
                 console.warn("No banner.png found in:", zipUrl);
             }
 
-            return "https://via.placeholder.com/220x220?text=No+Banner"; // Default placeholder image
+            return "https://via.placeholder.com/220x220?text=No+Banner";
         }
 
         async function extractDescription(zipUrl) {
@@ -254,7 +237,7 @@
 
             const card = document.createElement("div");
             card.className = "card";
-            card.dataset.name = name.toLowerCase(); // Add a data attribute for filtering
+            card.dataset.name = name.toLowerCase();
 
             const img = document.createElement("img");
             img.src = bannerUrl;
@@ -300,14 +283,12 @@
             popup.style.display = "flex";
         }
 
-        // Close the popup when clicked outside the content area
         document.getElementById("popup").addEventListener("click", (event) => {
             if (event.target === document.getElementById("popup")) {
                 document.getElementById("popup").style.display = "none";
             }
         });
 
-        // Load JSZip library
         const script = document.createElement("script");
         script.src = "https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js";
         script.onload = fetchZipFiles;
