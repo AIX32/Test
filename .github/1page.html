@@ -603,20 +603,28 @@ function applyResolutionScale(scale) {
     iframeContainer.style.height = `${100 / scale}%`;
 }
 
-// Event listener for the "Adjust Resolution" button
-document.getElementById('resolution-toggle').addEventListener('click', () => {
-    // Toggle between two resolution modes
-    if (scaleFactor === 1) {
-        scaleFactor = 0.75; // Lower resolution (higher FPS)
+// Function to ask for resolution and apply it
+function askForResolution() {
+    const resolution = prompt("Enter the resolution scale (e.g., 1 for normal, 0.75 for lower resolution):");
+    const scale = parseFloat(resolution);
+    
+    // Ensure the scale is a valid number
+    if (!isNaN(scale) && scale > 0) {
+        applyResolutionScale(scale);
+        // Optionally disable smooth scrolling and animations for lower resolutions
+        if (scale < 1) {
+            disableSmoothScrollingAndAnimations();
+        } else {
+            enableSmoothScrollingAndAnimations();
+        }
     } else {
-        scaleFactor = 1; // Reset to normal resolution
+        alert("Invalid resolution scale entered. Please enter a positive number.");
     }
-
-    applyResolutionScale(scaleFactor);
-});
+}
 
 // Function to disable smooth scrolling and animations inside the iframe
 function disableSmoothScrollingAndAnimations() {
+    const iframe = document.getElementById('iframe');
     const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
     
     // Disable animations
@@ -627,25 +635,22 @@ function disableSmoothScrollingAndAnimations() {
     iframeDocument.body.style.scrollBehavior = 'auto';
 }
 
-// Event listener for the "Boost FPS" button (resolution-toggle)
-document.getElementById('resolution-toggle').addEventListener('click', () => {
-    // Toggle between two resolution modes
-    if (scaleFactor === 1) {
-        scaleFactor = 0.75; // Lower resolution (higher FPS)
-        // Disable smooth scrolling and animations when boosting FPS
-        disableSmoothScrollingAndAnimations();
-    } else {
-        scaleFactor = 1; // Reset to normal resolution
-        // You can enable smooth scrolling and animations here if needed
-        const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
-        iframeDocument.body.style.animation = '';
-        iframeDocument.body.style.transition = '';
-        iframeDocument.body.style.scrollBehavior = 'smooth';
-    }
+// Function to enable smooth scrolling and animations inside the iframe
+function enableSmoothScrollingAndAnimations() {
+    const iframe = document.getElementById('iframe');
+    const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+    
+    // Enable animations and transitions
+    iframeDocument.body.style.animation = '';
+    iframeDocument.body.style.transition = '';
+    iframeDocument.body.style.scrollBehavior = 'smooth';
+}
 
-    // Apply scaling to the iframe (adjust resolution)
-    applyResolutionScale(scaleFactor);
+// Event listener for the "Adjust Resolution" button
+document.getElementById('resolution-toggle').addEventListener('click', () => {
+    askForResolution();
 });
+
 
     const fpsPingToggle = document.getElementById('fps-ping-toggle');
     const fpsPingDisplay = document.getElementById('fps-ping-display');
