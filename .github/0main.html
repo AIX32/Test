@@ -499,6 +499,16 @@ function toggleFullScreen() {
     }
         // Load folders on page load
         window.addEventListener('load', loadFolders);
+document.addEventListener('click', function(event) {
+  const target = event.target;
+
+  // Check if the click was on a link
+  if (target.tagName === 'A' && target.closest('iframe')) {
+    event.preventDefault(); // Prevent default navigation
+    window.open(target.href, '_blank'); // Open the link in a new tab
+  }
+});
+
     </script>
 </body>
 </html>
