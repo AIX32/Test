@@ -266,29 +266,22 @@
             <i class="fas fa-plus"></i>
             <span>New chat</span>
         </a>
-        <div class="chat-history">
-            <div class="chat-item">
-                <i class="fas fa-message"></i>
-                <span>Previous chat 1</span>
-            </div>
-            <div class="chat-item">
-                <i class="fas fa-message"></i>
-                <span>Previous chat 2</span>
-            </div>
+        <div class="chat-history" id="chat-history">
+            <!-- Previous chats will be dynamically inserted here -->
         </div>
     </div>
     <div class="main-content">
         <div class="model-selector">
-            <button class="model-button">
+            <button class="model-button" data-model="forge-chat">
                 <i class="fas fa-bolt"></i>
                 Forge Chat
             </button>
-            <button class="model-button active">
+            <button class="model-button active" data-model="forge-chat-plus">
                 <i class="fas fa-sparkles"></i>
                 Forge Chat Plus
             </button>
         </div>
-        <div class="chat-container">
+        <div class="chat-container" id="chat-container">
             <h1 class="welcome-text">Forge Chat</h1>
             <div class="examples-container" id="examples-container">
                 <!-- Example messages will be dynamically inserted here -->
@@ -309,8 +302,8 @@
             </div>
         </div>
         <div class="input-container">
-            <textarea class="input-box" placeholder="Send a message"></textarea>
-            <button class="send-button">
+            <textarea class="input-box" id="chat-input" placeholder="Send a message"></textarea>
+            <button class="send-button" id="send-button">
                 <i class="fas fa-paper-plane"></i>
             </button>
         </div>
@@ -332,6 +325,9 @@
             { icon: 'fas fa-gamepad', text: 'Recommend a video game for beginners' }
         ];
 
+        let selectedModel = 'forge-chat-plus';
+        let chatHistory = [];
+
         function getRandomMessages(count) {
             const shuffled = exampleMessages.sort(() => 0.5 - Math.random());
             return shuffled.slice(0, count);
@@ -348,27 +344,103 @@
                     <i class="${msg.icon}"></i>
                     <span>${msg.text}</span>
                 `;
+                box.addEventListener('click', () => sendMessage(msg.text));
                 container.appendChild(box);
             });
         }
 
+        function renderChatHistory() {
+            const container = document.getElementById('chat-history');
+            container.innerHTML = '';
+            chatHistory.forEach((chat, index) => {
+                const item = document.createElement('div');
+                item.className = 'chat-item';
+                item.innerHTML = `
+                    <i class="fas fa-message"></i>
+                    <span>${chat.name || `Chat ${index + 1}`}</span>
+                `;
+                item.addEventListener('click', () => loadChat(index));
+                container.appendChild(item);
+            });
+        }
+
+        function loadChat(index) {
+            const chat = chatHistory[index];
+            const chatContainer = document.getElementById('chat-container');
+            chatContainer.innerHTML = '';
+            chat.messages.forEach(msg => {
+                const messageElement = document.createElement('div');
+                messageElement.className = `message ${msg.sender === 'user' ? 'user' : 'assistant'}`;
+                messageElement.innerHTML = `
+                    <div class="message-content">${msg.content}</div>
+                `;
+                chatContainer.appendChild(messageElement);
+            });
+        }
+
+        async function sendMessage(message) {
+            const chatInput = document.getElementById('chat-input');
+            const chatContainer = document.getElementById('chat-container');
+
+            if (!message) {
+                message = chatInput.value.trim();
+                if (!message) return;
+                chatInput.value = '';
+            }
+
+            const userMessage = { sender: 'user', content: message };
+            chatHistory[chatHistory.length - 1].messages.push(userMessage);
+            renderMessage(userMessage);
+
+            const response = await fetch('http://localhost:8080/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ model: selectedModel, message })
+            });
+
+            const data = await response.json();
+            const botMessage = { sender: 'assistant', content: data.response };
+            chatHistory[chatHistory.length - 1].messages.push(botMessage);
+            renderMessage(botMessage);
+        }
+
+        function renderMessage(message) {
+            const chatContainer = document.getElementById('chat-container');
+            const messageElement = document.createElement('div');
+            messageElement.className = `message ${message.sender === 'user' ? 'user' : 'assistant'}`;
+            messageElement.innerHTML = `
+                <div class="message-content">${message.content}</div>
+            `;
+            chatContainer.appendChild(messageElement);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function createNewChat() {
+            chatHistory.push({ name: `Chat ${chatHistory.length + 1}`, messages: [] });
+            renderChatHistory();
+            loadChat(chatHistory.length - 1);
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             renderExampleMessages();
-        });
-
-        const chatItems = document.querySelectorAll('.chat-item');
-        chatItems.forEach(item => {
-            item.addEventListener('click', () => {
-                chatItems.forEach(i => i.classList.remove('active'));
-                item.classList.add('active');
+            renderChatHistory();
+            document.getElementById('send-button').addEventListener('click', sendMessage);
+            document.getElementById('chat-input').addEventListener('keydown', (event) => {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    sendMessage();
+                }
             });
-        });
-
-        const modelButtons = document.querySelectorAll('.model-button');
-        modelButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                modelButtons.forEach(b => b.classList.remove('active'));
-                button.classList.add('active');
+            document.querySelector('.new-chat').addEventListener('click', createNewChat);
+            const modelButtons = document.querySelectorAll('.model-button');
+            modelButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    modelButtons.forEach(b => b.classList.remove('active'));
+                    button.classList.add('active');
+                    selectedModel = button.getAttribute('data-model');
+                });
             });
         });
     </script>
