@@ -149,6 +149,64 @@
         .popup .desc-text {
             margin-bottom: 20px;
         }
+
+        .details-view {
+            display: none;
+            padding: 30px;
+            background-color: #222222;
+            color: #ffffff;
+            max-width: 900px;
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s;
+        }
+
+        .details-view h1 {
+            font-size: 32px;
+            color: #FFA500;
+            text-shadow: 0 0 10px #FF7F00, 0 0 20px #FFA500;
+        }
+
+        .details-view p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin: 20px 0;
+            color: #b0b0b0;
+        }
+
+        .back-button {
+            background-color: #FFA500;
+            color: #000;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        .back-button:hover {
+            background-color: #FF7F00;
+            box-shadow: 0 0 10px #FF7F00;
+        }
+
+        .line-break {
+            white-space: pre-wrap;
+        }
+
+        ::-webkit-scrollbar {
+            width: 0.1px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #343434;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #4C4D4D;
+        }
     </style>
 </head>
 <body>
@@ -170,6 +228,11 @@
                 <button id="download-btn">Download Texture Pack</button>
             </div>
         </div>
+    </div>
+
+    <div id="details-view" class="details-view">
+        <button class="back-button" onclick="goBack()">Back</button>
+        <div id="details-content"></div>
     </div>
 
     <script>
@@ -326,6 +389,12 @@
                 <h1>${data.title}</h1>
                 <p class="line-break">${data.content}</p>
             `;
+        }
+
+        function goBack() {
+            const detailsView = document.getElementById("details-view");
+            detailsView.style.display = "none";
+            filterCards(initialSearchTerm);
         }
 
         function filterCards(searchTerm) {
