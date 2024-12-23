@@ -8,172 +8,168 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
+            font-family: Arial, sans-serif;
             background-color: #181818;
-            color: #ffffff;
-        }
-
-        header {
-            background-color: #242424;
-            padding: 15px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            gap: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-        }
-
-        header h1 {
-            font-size: 28px;
-            color: #FFA500;
+            color: #e5e5e5;
             margin: 0;
-            transition: color 0.3s, text-shadow 0.3s;
-            text-shadow: 0 0 10px #FF7F00, 0 0 20px #FFA500;
-        }
-
-        header input {
-            padding: 10px 14px;
-            border: 1px solid #555555;
-            border-radius: 5px;
-            width: 300px;
-            background-color: #333333;
-            color: #ffffff;
-            transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
-        }
-
-        header input:hover {
-            background-color: #444444;
-            border-color: #FFA500;
-            box-shadow: 0 0 8px #FFA500;
-        }
-
-        header input:focus {
-            outline: none;
-            background-color: #444444;
-            border-color: #FF7F00;
-            box-shadow: 0 0 10px #FF7F00;
-        }
-
-        .container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
             padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .cards-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            width: 100%;
+            max-width: 1200px;
         }
 
         .card {
-            background-color: #2a2a2a;
+            background-color: #333;
             border-radius: 10px;
+            width: 220px;
+            margin: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
             overflow: hidden;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
+            transition: transform 0.3s, box-shadow 0.3s;
             cursor: pointer;
         }
 
         .card:hover {
-            transform: scale(1.05);
+            transform: translateY(-10px);
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
-            background-color: #333333;
         }
 
-        .card-content {
-            padding: 15px;
+        .card img {
+            width: 220px;
+            height: 220px;
+            object-fit: cover;
         }
 
-        .card-content h2 {
-            margin: 0;
-            font-size: 18px;
+        .card-title {
+            text-align: center;
+            padding: 10px;
+            font-size: 1em;
+            text-transform: capitalize;
             color: #FFA500;
-            transition: color 0.3s, text-shadow 0.3s;
         }
 
-        .card-content h2:hover {
-            color: #FF7F00;
-            text-shadow: 0 0 10px #FF7F00, 0 0 20px #FFA500;
-        }
-
-        .card-content p {
-            margin: 10px 0;
-            font-size: 14px;
-            color: #b0b0b0;
-        }
-
-        .details-view {
-            display: none;
-            padding: 30px;
-            background-color: #222222;
-            color: #ffffff;
-            max-width: 900px;
-            margin: 20px auto;
-            border-radius: 10px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
-            transition: transform 0.3s;
-        }
-
-        .details-view h1 {
-            font-size: 32px;
+        a {
+            text-decoration: none;
             color: #FFA500;
-            text-shadow: 0 0 10px #FF7F00, 0 0 20px #FFA500;
         }
 
-        .details-view p {
-            font-size: 16px;
-            line-height: 1.6;
-            margin: 20px 0;
-            color: #b0b0b0;
+        .search-results {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            padding: 20px;
         }
 
-        .back-button {
-            background-color: #FFA500;
-            color: #000;
-            padding: 10px 20px;
+        .search-results h2 {
+            color: #ff7f00;
+            margin-bottom: 10px;
+        }
+
+        .search-results hr {
             border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
+            height: 2px;
+            background-color: #444;
+            margin: 20px 0;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup-content {
+            background-color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            max-width: 900px;
+            max-height: 700px;
+            position: relative;
+            overflow-y: auto;
+        }
+
+        .popup img {
+            width: 400px;
+            height: auto;
+            object-fit: contain;
+            margin-right: 20px;
+            border-radius: 10px;
+            border: none;
+        }
+
+        .popup .desc-text {
+            color: #e5e5e5;
+            font-size: 1.1em;
             margin-bottom: 20px;
-            transition: background-color 0.3s, box-shadow 0.3s;
         }
 
-        .back-button:hover {
-            background-color: #FF7F00;
-            box-shadow: 0 0 10px #FF7F00;
+        .popup .popup-buttons {
+            display: flex;
+            justify-content: flex-end;
+            width: 100%;
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            margin-left: 30px;
         }
 
-        .line-break {
-            white-space: pre-wrap;
+        .popup button {
+            background-color: #FFA500;
+            color: #333;
+            border: none;
+            padding: 10px;
+            font-size: 1.1em;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 30px;
         }
 
-        ::-webkit-scrollbar {
-            width: 0.1px;
+        .popup button:hover {
+            background-color: #ffae1a;
         }
 
-        ::-webkit-scrollbar-track {
-            background: #343434;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #4C4D4D;
+        .popup .desc-text {
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Search Results</h1>
-    </header>
     <div class="search-results">
         <h2>Texture Packs:</h2>
-        <div class="container" id="texture-pack-results"></div>
+        <div class="cards-container" id="texture-pack-results"></div>
         <hr>
         <h2>Wiki:</h2>
-        <div class="container" id="wiki-results"></div>
+        <div class="cards-container" id="wiki-results"></div>
     </div>
 
-    <div id="details-view" class="details-view">
-        <button class="back-button" onclick="goBack()">Back</button>
-        <div id="details-content"></div>
+    <div class="popup" id="popup">
+        <div class="popup-content">
+            <div style="display: flex;">
+                <img id="popup-image" src="" alt="Banner">
+                <div class="desc-text" id="popup-text"></div>
+            </div>
+            <div class="popup-buttons">
+                <button id="download-btn">Download Texture Pack</button>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -330,12 +326,6 @@
                 <h1>${data.title}</h1>
                 <p class="line-break">${data.content}</p>
             `;
-        }
-
-        function goBack() {
-            const detailsView = document.getElementById("details-view");
-            detailsView.style.display = "none";
-            filterCards(initialSearchTerm);
         }
 
         function filterCards(searchTerm) {
