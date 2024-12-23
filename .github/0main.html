@@ -269,6 +269,15 @@
             background-color: #ff8c00;
             box-shadow: 0 0 20px #e67e00;
         }
+        
+        .sidebar .sticky-bottom {
+    position: absolute;
+    bottom: 20px;
+    width: 70%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
     </style>
 </head>
 <body>
@@ -297,6 +306,11 @@
             <i class="fas fa-info-circle"></i>
             <span>Info</span>
         </a>
+        <a href="javascript:void(0)" class="sidebar-link sticky-bottom" onclick="setActiveLink(this, 'page7')">
+    <i class="fas fa-unlock-keyhole"></i>
+    <span>Keys</span>
+</a>
+
     </div>
 
     <div class="content">
@@ -328,13 +342,15 @@
     </div>
 
     <script>
-        const pages = {
-            page2: 'https://raw.githack.com/AIX32/BloxdForge-Files/main/.github/2page.html',
-            page3: 'https://raw.githack.com/AIX32/BloxdForge-Files/main/.github/3page.html',
-            page4: 'https://raw.githack.com/AIX32/BloxdForge-Files/main/.github/4page.html',
-            page5: 'https://raw.githack.com/AIX32/BloxdForge-Files/main/.github/5page.html',
-            page6: 'https://raw.githack.com/AIX32/BloxdForge-Files/main/.github/6page.html',
-        };
+const pages = {
+    page2: 'https://raw.githack.com/AIX32/BloxdForge-Files/main/.github/2page.html',
+    page3: 'https://raw.githack.com/AIX32/BloxdForge-Files/main/.github/3page.html',
+    page4: 'https://raw.githack.com/AIX32/BloxdForge-Files/main/.github/4page.html',
+    page5: 'https://raw.githack.com/AIX32/BloxdForge-Files/main/.github/5page.html',
+    page6: 'https://raw.githack.com/AIX32/BloxdForge-Files/main/.github/6page.html',
+    page7: 'https://raw.githack.com/AIX32/BloxdForge-Files/main/.github/7page.html', // New page
+};
+
 
         function loadPage(pageName) {
             const iframe = document.querySelector('iframe[name="iframe"]');
