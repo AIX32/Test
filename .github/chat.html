@@ -393,22 +393,29 @@
             chatHistory[chatHistory.length - 1].messages.push(userMessage);
             renderMessage(userMessage);
 
-            const apiKey = selectedModel === 'forge-chat-plus' ? 'IvVJI7ABA13nUSRjLkA5StgVAVG3f7VU' : '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';
-            const model = selectedModel === 'forge-chat-plus' ? 'pixtral-12b-2409' : 'meta-llama/llama-3.1-70b-instruct:free';
-            const url = selectedModel === 'forge-chat-plus' ? 'https://api.mistralai.com/v1/chat/completions' : 'https://openrouter.ai/api/v1/chat/completions';
-            const headers = {
-                'Authorization': `Bearer ${apiKey}`,
-                'Content-Type': 'application/json'
-            };
-            const data = {
-                model: model,
-                messages: [
-                    {
-                        role: 'user',
-                        content: message
-                    }
-                ]
-            };
+            let url, headers, data;
+
+            if (selectedModel === 'forge-chat-plus') {
+                url = 'https://openrouter.ai/api/v1/chat/completions';
+                headers = {
+                    'Authorization': `Bearer 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`,
+                    'Content-Type': 'application/json'
+                };
+                data = {
+                    model: 'meta-llama/llama-3.1-405b-instruct:free',
+                    messages: [{ role: 'user', content: message }]
+                };
+            } else {
+                url = 'https://openrouter.ai/api/v1/chat/completions';
+                headers = {
+                    'Authorization': `Bearer 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`,
+                    'Content-Type': 'application/json'
+                };
+                data = {
+                    model: 'meta-llama/llama-3.1-70b-instruct:free',
+                    messages: [{ role: 'user', content: message }]
+                };
+            }
 
             try {
                 const response = await fetch(url, {
