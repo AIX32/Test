@@ -76,6 +76,17 @@
             color: #ff7f00;
         }
 
+        .chat-item:hover .edit-icon {
+            display: inline;
+        }
+
+        .edit-icon {
+            display: none;
+            margin-left: auto;
+            color: #ff7f00;
+            cursor: pointer;
+        }
+
         .main-content {
             flex: 1;
             display: flex;
@@ -151,6 +162,10 @@
             color: #ececf1;
         }
 
+        .message .profile-icon {
+            margin-right: 10px;
+        }
+
         .message-content {
             font-size: 16px;
             line-height: 1.5;
@@ -214,7 +229,7 @@
         }
 
         .example-box {
-            background-color: #40414f;
+            background-color: #2a2a2a;
             padding: 15px;
             border-radius: 8px;
             color: white;
@@ -227,7 +242,15 @@
         }
 
         .example-box:hover {
-            background-color: #4a4b59;
+            background-color: #333333;
+        }
+
+        ::-webkit-scrollbar-track {
+            background-color: #343434;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #4C4D4D;
         }
     </style>
 </head>
@@ -282,15 +305,20 @@
             { icon: 'fas fa-gamepad', text: 'Recommend a video game for beginners' }
         ];
 
-
         let selectedModel = 'forge-chat-plus';
         let chatHistory = JSON.parse(localStorage.getItem('chatHistory')) || [];
         let currentChatIndex = -1;
 
+        function getRandomExamples(count) {
+            const shuffled = exampleMessages.sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, count);
+        }
+
         function renderExampleMessages() {
             const container = document.getElementById('examples-container');
             container.innerHTML = '';
-            exampleMessages.forEach(msg => {
+            const examples = getRandomExamples(4);
+            examples.forEach(msg => {
                 const box = document.createElement('div');
                 box.className = 'example-box';
                 box.innerHTML = `
@@ -316,6 +344,7 @@
                 item.innerHTML = `
                     <i class="fas fa-message"></i>
                     <span>${chat.name || `Chat ${index + 1}`}</span>
+                    <i class="fas fa-edit edit-icon"></i>
                 `;
                 item.addEventListener('click', () => loadChat(index));
                 container.appendChild(item);
@@ -378,7 +407,9 @@
                 console.error('Error:', error);
                 const errorMessage = { 
                     sender: 'assistant', 
-                    content: 'Sorry, I encountered an error.' 
+                    content: selectedModel === 'forge-chat-plus' 
+                        ? 'High traffic. Try Forge Chat instead.' 
+                        : 'High traffic. Try again later.' 
                 };
                 chatHistory[currentChatIndex].messages.push(errorMessage);
                 renderMessage(errorMessage);
@@ -390,6 +421,7 @@
             const messageElement = document.createElement('div');
             messageElement.className = `message ${message.sender}`;
             messageElement.innerHTML = `
+                <i class="profile-icon ${message.sender === 'user' ? 'fas fa-user-circle' : 'fas fa-robot'}"></i>
                 <div class="message-content">${message.content}</div>
             `;
             chatContainer.appendChild(messageElement);
