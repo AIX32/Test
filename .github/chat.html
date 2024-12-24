@@ -490,10 +490,25 @@
             const chat = chatHistory[index];
             const chatContainer = document.getElementById('chat-container');
             chatContainer.innerHTML = '';
-            chat.messages.forEach(msg => {
-                renderMessage(msg);
-            });
+            if (chat.messages.length === 0) {
+                showWelcomeTextAndExamples();
+            } else {
+                chat.messages.forEach(msg => {
+                    renderMessage(msg);
+                });
+            }
             renderChatHistory();
+        }
+
+        function showWelcomeTextAndExamples() {
+            const chatContainer = document.getElementById('chat-container');
+            chatContainer.innerHTML = `
+                <h1 class="welcome-text">Forge Chat</h1>
+                <div class="examples-container" id="examples-container">
+                    <!-- Example messages will be dynamically inserted here -->
+                </div>
+            `;
+            renderExampleMessages();
         }
 
         async function sendMessage(message) {
@@ -580,7 +595,7 @@
                         if (newMessage) {
                             const index = chatHistory[currentChatIndex].messages.findIndex(msg => msg === message);
                             if (index !== -1) {
-                                chatHistory[currentChatIndex].messages.splice(index, 2);
+                                chatHistory[currentChatIndex].messages.splice(index, 1, { sender: 'user', content: newMessage });
                                 sendMessage(newMessage);
                             }
                         }
