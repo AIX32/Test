@@ -435,6 +435,8 @@
 
         function renderExampleMessages() {
             const container = document.getElementById('examples-container');
+            if (!container) return;
+            
             container.innerHTML = '';
             const examples = getRandomExamples(4);
             examples.forEach(msg => {
@@ -448,6 +450,8 @@
                     if (currentChatIndex === -1) {
                         createNewChat();
                     }
+                    document.querySelector('.welcome-text')?.remove();
+                    document.querySelector('.examples-container')?.remove();
                     sendMessage(msg.text);
                 });
                 container.appendChild(box);
@@ -466,7 +470,9 @@
                     <i class="fas fa-edit edit-icon"></i>
                 `;
                 item.addEventListener('click', () => loadChat(index));
-                item.querySelector('.edit-icon').addEventListener('click', (e) => {
+                
+                const editIcon = item.querySelector('.edit-icon');
+                editIcon.addEventListener('click', (e) => {
                     e.stopPropagation();
                     const chatNameSpan = item.querySelector('.chat-name');
                     const chatNameInput = document.createElement('input');
@@ -474,11 +480,20 @@
                     chatNameInput.value = chatNameSpan.innerText;
                     chatNameSpan.replaceWith(chatNameInput);
                     chatNameInput.focus();
-                    chatNameInput.addEventListener('keydown', (event) => {
-                        if (event.key === 'Enter') {
-                            chat.name = chatNameInput.value;
+
+                    const handleNameUpdate = () => {
+                        const newName = chatNameInput.value.trim();
+                        if (newName) {
+                            chatHistory[index].name = newName;
                             localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
                             renderChatHistory();
+                        }
+                    };
+
+                    chatNameInput.addEventListener('blur', handleNameUpdate);
+                    chatNameInput.addEventListener('keydown', (event) => {
+                        if (event.key === 'Enter') {
+                            handleNameUpdate();
                         }
                     });
                 });
@@ -491,8 +506,13 @@
             const chat = chatHistory[index];
             const chatContainer = document.getElementById('chat-container');
             chatContainer.innerHTML = '';
-            if (chat.messages.length === 0) {
-                showWelcomeTextAndExamples();
+            
+            if (!chat.messages || chat.messages.length === 0) {
+                chatContainer.innerHTML = `
+                    <h1 class="welcome-text">Forge Chat</h1>
+                    <div class="examples-container" id="examples-container"></div>
+                `;
+                renderExampleMessages();
             } else {
                 chat.messages.forEach(msg => {
                     renderMessage(msg);
@@ -523,6 +543,9 @@
                 if (!message) return;
                 chatInput.value = '';
             }
+
+            document.querySelector('.welcome-text')?.remove();
+            document.querySelector('.examples-container')?.remove();
 
             const userMessage = { sender: 'user', content: message };
             chatHistory[currentChatIndex].messages.push(userMessage);
@@ -576,33 +599,55 @@
                 ${message.sender === 'assistant' ? `<i class="copy-icon fas fa-copy"></i>` : ''}
                 ${message.sender === 'user' ? `<i class="edit-icon fas fa-edit"></i>` : ''}
             `;
-            messageElement.querySelector('.copy-icon')?.addEventListener('click', () => {
-                navigator.clipboard.writeText(message.content).then(() => {
-                    console.log('Copied to clipboard');
-                }).catch(err => {
-                    console.error('Could not copy text: ', err);
+
+            if (message.sender === 'assistant') {
+                const copyIcon = messageElement.querySelector('.copy-icon');
+                copyIcon.addEventListener('click', async () => {
+                    try {
+                        await navigator.clipboard.writeText(message.content);
+                        copyIcon.classList.add('copied');
+                        setTimeout(() => copyIcon.classList.remove('copied'), 1000);
+                    } catch (err) {
+                        console.error('Failed to copy:', err);
+                    }
                 });
-            });
-            messageElement.querySelector('.edit-icon')?.addEventListener('click', () => {
-                const messageContent = messageElement.querySelector('.message-content');
-                const messageInput = document.createElement('textarea');
-                messageInput.className = 'message-content-input';
-                messageInput.value = messageContent.innerText;
-                messageContent.replaceWith(messageInput);
-                messageInput.focus();
-                messageInput.addEventListener('keydown', (event) => {
-                    if (event.key === 'Enter') {
+            }
+
+            if (message.sender === 'user') {
+                const editIcon = messageElement.querySelector('.edit-icon');
+                editIcon.addEventListener('click', () => {
+                    const messageContent = messageElement.querySelector('.message-content');
+                    const messageInput = document.createElement('textarea');
+                    messageInput.className = 'message-content-input';
+                    messageInput.value = messageContent.innerText;
+                    messageContent.replaceWith(messageInput);
+                    messageInput.focus();
+
+                    const handleEdit = () => {
                         const newMessage = messageInput.value.trim();
                         if (newMessage) {
                             const index = chatHistory[currentChatIndex].messages.findIndex(msg => msg === message);
                             if (index !== -1) {
-                                chatHistory[currentChatIndex].messages.splice(index, 1, { sender: 'user', content: newMessage });
+                                chatHistory[currentChatIndex].messages = chatHistory[currentChatIndex].messages.slice(0, index);
+                                localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+                                while (messageElement.nextSibling) {
+                                    messageElement.nextSibling.remove();
+                                }
                                 sendMessage(newMessage);
                             }
                         }
-                    }
+                    };
+
+                    messageInput.addEventListener('blur', handleEdit);
+                    messageInput.addEventListener('keydown', (event) => {
+                        if (event.key === 'Enter' && !event.shiftKey) {
+                            event.preventDefault();
+                            handleEdit();
+                        }
+                    });
                 });
-            });
+            }
+
             chatContainer.appendChild(messageElement);
             chatContainer.scrollTop = chatContainer.scrollHeight;
         }
@@ -614,7 +659,11 @@
                 messages: [] 
             });
             const chatContainer = document.getElementById('chat-container');
-            chatContainer.innerHTML = '';
+            chatContainer.innerHTML = `
+                <h1 class="welcome-text">Forge Chat</h1>
+                <div class="examples-container" id="examples-container"></div>
+            `;
+            renderExampleMessages();
             renderChatHistory();
             localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
         }
