@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forge Chat</title>
+    <title>Forge Chat UI</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
     <style>
         * {
@@ -45,7 +45,7 @@
         .new-chat {
             border: 1px solid #4a4b53;
             border-radius: 5px;
-            padding: 12px;
+            padding: 8px;
             display: flex;
             align-items: center;
             gap: 12px;
@@ -54,6 +54,7 @@
             transition: background-color 0.2s;
             color: white;
             text-decoration: none;
+            width: 100%;
         }
 
         .new-chat:hover {
@@ -62,7 +63,7 @@
 
         .shrink-button {
             position: absolute;
-            bottom: 10px;
+            top: 10px;
             right: 10px;
             background: none;
             border: none;
@@ -90,6 +91,7 @@
             gap: 12px;
             color: #ececf1;
             margin-bottom: 2px;
+            position: relative;
         }
 
         .chat-item:hover {
@@ -101,15 +103,25 @@
             color: #ff7f00;
         }
 
-        .chat-item:hover .edit-icon {
-            display: inline;
-        }
-
-        .edit-icon {
+        .chat-item .edit-icon {
             display: none;
             margin-left: auto;
             color: #ff7f00;
             cursor: pointer;
+        }
+
+        .chat-item:hover .edit-icon {
+            display: inline;
+        }
+
+        .chat-item .chat-name-input {
+            background: none;
+            border: 1px solid #4a4b53;
+            color: white;
+            padding: 4px;
+            font-size: 14px;
+            width: 100%;
+            outline: none;
         }
 
         .main-content {
@@ -195,16 +207,34 @@
             display: inline;
         }
 
+        .message.user .message-content-input {
+            background: none;
+            border: 1px solid #4a4b53;
+            color: white;
+            padding: 10px;
+            font-size: 16px;
+            width: 100%;
+            outline: none;
+            resize: none;
+        }
+
         .message.assistant {
             background-color: #444654;
             margin-right: auto;
             color: #ececf1;
+            padding: 10px;
+            border-radius: 10px;
+            position: relative;
         }
 
         .message.assistant .profile-icon {
             position: absolute;
             top: 10px;
             left: 10px;
+        }
+
+        .message.assistant .message-content {
+            margin-left: 40px;
         }
 
         .message.assistant .copy-icon {
@@ -222,7 +252,6 @@
         .message-content {
             font-size: 16px;
             line-height: 1.5;
-            margin-left: 40px;
         }
 
         .input-container {
@@ -306,10 +335,33 @@
         ::-webkit-scrollbar-thumb {
             background-color: #4C4D4D;
         }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .logo .logo-circle {
+            background-color: #ff7f00;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-family: 'Arial', sans-serif;
+        }
     </style>
 </head>
 <body>
     <div class="sidebar">
+        <div class="logo">
+            <div class="logo-circle">BF</div>
+        </div>
         <a href="#" class="new-chat">
             <i class="fas fa-plus"></i>
             <span>New chat</span>
@@ -400,18 +452,25 @@
                 item.className = `chat-item ${index === currentChatIndex ? 'active' : ''}`;
                 item.innerHTML = `
                     <i class="fas fa-message"></i>
-                    <span>${chat.name || `Chat ${index + 1}`}</span>
+                    <span class="chat-name">${chat.name || `Chat ${index + 1}`}</span>
                     <i class="fas fa-edit edit-icon"></i>
                 `;
                 item.addEventListener('click', () => loadChat(index));
                 item.querySelector('.edit-icon').addEventListener('click', (e) => {
                     e.stopPropagation();
-                    const newName = prompt('Enter a new name for this chat:', chat.name || `Chat ${index + 1}`);
-                    if (newName) {
-                        chat.name = newName;
-                        localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
-                        renderChatHistory();
-                    }
+                    const chatNameSpan = item.querySelector('.chat-name');
+                    const chatNameInput = document.createElement('input');
+                    chatNameInput.className = 'chat-name-input';
+                    chatNameInput.value = chatNameSpan.innerText;
+                    chatNameSpan.replaceWith(chatNameInput);
+                    chatNameInput.focus();
+                    chatNameInput.addEventListener('keydown', (event) => {
+                        if (event.key === 'Enter') {
+                            chat.name = chatNameInput.value;
+                            localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+                            renderChatHistory();
+                        }
+                    });
                 });
                 container.appendChild(item);
             });
@@ -493,18 +552,31 @@
                 ${message.sender === 'user' ? `<i class="edit-icon fas fa-edit"></i>` : ''}
             `;
             messageElement.querySelector('.copy-icon')?.addEventListener('click', () => {
-                navigator.clipboard.writeText(message.content);
+                navigator.clipboard.writeText(message.content).then(() => {
+                    console.log('Copied to clipboard');
+                }).catch(err => {
+                    console.error('Could not copy text: ', err);
+                });
             });
             messageElement.querySelector('.edit-icon')?.addEventListener('click', () => {
-                const index = chatHistory[currentChatIndex].messages.findIndex(msg => msg === message);
-                if (index !== -1) {
-                    chatHistory[currentChatIndex].messages.splice(index, 2);
-                    localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
-                    chatContainer.innerHTML = '';
-                    chatHistory[currentChatIndex].messages.forEach(msg => {
-                        renderMessage(msg);
-                    });
-                }
+                const messageContent = messageElement.querySelector('.message-content');
+                const messageInput = document.createElement('textarea');
+                messageInput.className = 'message-content-input';
+                messageInput.value = messageContent.innerText;
+                messageContent.replaceWith(messageInput);
+                messageInput.focus();
+                messageInput.addEventListener('keydown', (event) => {
+                    if (event.key === 'Enter') {
+                        const newMessage = messageInput.value.trim();
+                        if (newMessage) {
+                            const index = chatHistory[currentChatIndex].messages.findIndex(msg => msg === message);
+                            if (index !== -1) {
+                                chatHistory[currentChatIndex].messages.splice(index, 2);
+                                sendMessage(newMessage);
+                            }
+                        }
+                    }
+                });
             });
             chatContainer.appendChild(messageElement);
             chatContainer.scrollTop = chatContainer.scrollHeight;
