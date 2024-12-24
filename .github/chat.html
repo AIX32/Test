@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forge Chat UI</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -571,7 +572,7 @@
             messageElement.className = `message ${message.sender}`;
             messageElement.innerHTML = `
                 ${message.sender === 'assistant' ? `<i class="profile-icon fas fa-robot"></i>` : ''}
-                <div class="message-content">${message.content}</div>
+                <div class="message-content">${message.sender === 'assistant' ? marked.parse(message.content) : message.content}</div>
                 ${message.sender === 'assistant' ? `<i class="copy-icon fas fa-copy"></i>` : ''}
                 ${message.sender === 'user' ? `<i class="edit-icon fas fa-edit"></i>` : ''}
             `;
