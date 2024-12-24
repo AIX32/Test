@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forge Chat UI</title>
+    <title>Forge Chat</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
     <style>
         * {
@@ -23,7 +23,7 @@
         }
 
         .sidebar {
-            width: 260px;
+            width: 220px;
             background-color: #242424;
             color: white;
             padding: 10px;
@@ -31,6 +31,15 @@
             flex-direction: column;
             height: 100vh;
             position: relative;
+        }
+
+        .sidebar.collapsed {
+            width: 60px;
+        }
+
+        .sidebar.collapsed .chat-history,
+        .sidebar.collapsed .new-chat span {
+            display: none;
         }
 
         .new-chat {
@@ -48,6 +57,22 @@
         }
 
         .new-chat:hover {
+            background-color: #2b2c2f;
+        }
+
+        .shrink-button {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: #acacbe;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 6px;
+        }
+
+        .shrink-button:hover {
             background-color: #2b2c2f;
         }
 
@@ -148,12 +173,26 @@
             border-radius: 10px;
             width: 75%;
             max-width: 800px;
+            position: relative;
         }
 
         .message.user {
-            background-color: #343541;
+            background-color: #3a3b45;
             margin-left: auto;
             color: #ececf1;
+        }
+
+        .message.user .edit-icon {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            display: none;
+            color: #ff7f00;
+            cursor: pointer;
+        }
+
+        .message.user:hover .edit-icon {
+            display: inline;
         }
 
         .message.assistant {
@@ -162,13 +201,28 @@
             color: #ececf1;
         }
 
-        .message .profile-icon {
-            margin-right: 10px;
+        .message.assistant .profile-icon {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+
+        .message.assistant .copy-icon {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            color: #acacbe;
+            cursor: pointer;
+        }
+
+        .message.assistant .copy-icon:hover {
+            color: #ff7f00;
         }
 
         .message-content {
             font-size: 16px;
             line-height: 1.5;
+            margin-left: 40px;
         }
 
         .input-container {
@@ -260,6 +314,9 @@
             <i class="fas fa-plus"></i>
             <span>New chat</span>
         </a>
+        <button class="shrink-button" id="shrink-button">
+            <i class="fas fa-chevron-left"></i>
+        </button>
         <div class="chat-history" id="chat-history">
             <!-- Previous chats will be dynamically inserted here -->
         </div>
@@ -347,6 +404,15 @@
                     <i class="fas fa-edit edit-icon"></i>
                 `;
                 item.addEventListener('click', () => loadChat(index));
+                item.querySelector('.edit-icon').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const newName = prompt('Enter a new name for this chat:', chat.name || `Chat ${index + 1}`);
+                    if (newName) {
+                        chat.name = newName;
+                        localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+                        renderChatHistory();
+                    }
+                });
                 container.appendChild(item);
             });
         }
@@ -421,9 +487,25 @@
             const messageElement = document.createElement('div');
             messageElement.className = `message ${message.sender}`;
             messageElement.innerHTML = `
-                <i class="profile-icon ${message.sender === 'user' ? 'fas fa-user-circle' : 'fas fa-robot'}"></i>
+                ${message.sender === 'assistant' ? `<i class="profile-icon fas fa-robot"></i>` : ''}
                 <div class="message-content">${message.content}</div>
+                ${message.sender === 'assistant' ? `<i class="copy-icon fas fa-copy"></i>` : ''}
+                ${message.sender === 'user' ? `<i class="edit-icon fas fa-edit"></i>` : ''}
             `;
+            messageElement.querySelector('.copy-icon')?.addEventListener('click', () => {
+                navigator.clipboard.writeText(message.content);
+            });
+            messageElement.querySelector('.edit-icon')?.addEventListener('click', () => {
+                const index = chatHistory[currentChatIndex].messages.findIndex(msg => msg === message);
+                if (index !== -1) {
+                    chatHistory[currentChatIndex].messages.splice(index, 2);
+                    localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+                    chatContainer.innerHTML = '';
+                    chatHistory[currentChatIndex].messages.forEach(msg => {
+                        renderMessage(msg);
+                    });
+                }
+            });
             chatContainer.appendChild(messageElement);
             chatContainer.scrollTop = chatContainer.scrollHeight;
         }
@@ -470,6 +552,14 @@
                     button.classList.add('active');
                     selectedModel = button.getAttribute('data-model');
                 });
+            });
+
+            document.getElementById('shrink-button').addEventListener('click', () => {
+                const sidebar = document.querySelector('.sidebar');
+                sidebar.classList.toggle('collapsed');
+                document.getElementById('shrink-button').innerHTML = sidebar.classList.contains('collapsed') 
+                    ? '<i class="fas fa-chevron-right"></i>' 
+                    : '<i class="fas fa-chevron-left"></i>';
             });
         });
     </script>
