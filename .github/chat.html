@@ -183,8 +183,8 @@
             padding: 20px;
             margin: 10px 0;
             border-radius: 10px;
-            width: 75%;
-            max-width: 800px;
+            width: auto;
+            max-width: 75%;
             position: relative;
         }
 
@@ -243,6 +243,11 @@
             right: 10px;
             color: #acacbe;
             cursor: pointer;
+            display: none;
+        }
+
+        .message.assistant:hover .copy-icon {
+            display: inline;
         }
 
         .message.assistant .copy-icon:hover {
@@ -337,7 +342,7 @@
         }
 
         .logo {
-            display: flex;
+            display: none;
             align-items: center;
             justify-content: center;
             margin-bottom: 20px;
@@ -354,6 +359,10 @@
             color: white;
             font-weight: bold;
             font-family: 'Arial', sans-serif;
+        }
+
+        .sidebar.collapsed .logo {
+            display: flex;
         }
     </style>
 </head>
