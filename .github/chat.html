@@ -107,12 +107,17 @@
         .chat-item .edit-icon {
             display: none;
             margin-left: auto;
-            color: #ff7f00;
+            color: #acacbe;
             cursor: pointer;
+            transition: color 0.2s;
         }
 
         .chat-item:hover .edit-icon {
             display: inline;
+        }
+
+        .chat-item .edit-icon:hover {
+            color: #ff7f00;
         }
 
         .chat-item .chat-name-input {
@@ -200,12 +205,17 @@
             top: 10px;
             left: 10px;
             display: none;
-            color: #ff7f00;
+            color: #acacbe;
             cursor: pointer;
+            transition: color 0.2s;
         }
 
         .message.user:hover .edit-icon {
             display: inline;
+        }
+
+        .message.user .edit-icon:hover {
+            color: #ff7f00;
         }
 
         .message.user .message-content-input {
@@ -245,6 +255,7 @@
             color: #acacbe;
             cursor: pointer;
             display: none;
+            transition: color 0.2s;
         }
 
         .message.assistant:hover .copy-icon {
