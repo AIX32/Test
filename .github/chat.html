@@ -603,9 +603,7 @@
                     sender: 'assistant', 
                     content: responseData.choices[0].message.content 
                 };
-                chatHistory[currentChatIndex].messages.push(botMessage);
-                renderMessage(botMessage);
-                localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+                streamMessage(botMessage);
             } catch (error) {
                 console.error('Error:', error);
                 const errorMessage = { 
@@ -679,6 +677,47 @@
             }
 
             chatContainer.appendChild(messageElement);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function streamMessage(message) {
+            const chatContainer = document.getElementById('chat-container');
+            const messageElement = document.createElement('div');
+            messageElement.className = `message assistant`;
+            messageElement.innerHTML = `
+                <i class="profile-icon fas fa-robot"></i>
+                <div class="message-content"></div>
+                <i class="copy-icon fas fa-copy"></i>
+            `;
+
+            const messageContent = messageElement.querySelector('.message-content');
+            const words = message.content.split(' ');
+            let index = 0;
+
+            const typeWriter = () => {
+                if (index < words.length) {
+                    messageContent.innerHTML += marked.parse(words[index] + ' ');
+                    index++;
+                    setTimeout(typeWriter, 20);
+                } else {
+                    chatHistory[currentChatIndex].messages.push(message);
+                    localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+
+                    const copyIcon = messageElement.querySelector('.copy-icon');
+                    copyIcon.addEventListener('click', async () => {
+                        try {
+                            await navigator.clipboard.writeText(message.content);
+                            copyIcon.classList.add('copied');
+                            setTimeout(() => copyIcon.classList.remove('copied'), 1000);
+                        } catch (err) {
+                            console.error('Failed to copy:', err);
+                        }
+                    });
+                }
+            };
+
+            chatContainer.appendChild(messageElement);
+            typeWriter();
             chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
