@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Board Clip</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #181818;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+}
+
+.board {
+    background-color: #282828;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    width: 100%;
+    max-width: 400px;
+    word-wrap: break-word;
+    overflow: hidden;
+    white-space: pre-wrap;
+    margin-bottom: 1rem;
+    position: relative;
+    transition: all 0.3s ease; /* Smooth transition for all properties */
+}
+
+.board:hover {
+    transform: scale(1.02); /* Slight zoom effect on hover */
+}
+
+.board p {
+    margin-bottom: 1rem;
+    flex-grow: 1;
+    text-align: center;
+    word-wrap: break-word;
+    max-width: 100%;
+    line-height: 1.5;
+    font-size: 1rem;
+    white-space: pre-wrap;
+    width: 100%;
+    min-height: 60px;
+    outline: none;
+    overflow-y: auto;
+    max-height: 120px;
+    transition: max-height 0.3s ease; /* Smooth transition for height */
+}
+
+.delete-btn {
+    background-color: #e74c3c;
+    font-size: 0.8rem;
+    padding: 0.25rem;
+    margin-top: 0.5rem;
+    border-radius: 50%;
+    color: white;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transition */
+}
+
+.delete-btn:hover {
+    background-color: #c0392b;
+    transform: scale(1.1); /* Slight scaling effect on hover */
+}
+
+.add-board {
+    background-color: #ff8c00;
+    color: #fff;
+    padding: 1rem;
+    border-radius: 4px;
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Light shadow for depth */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transition */
+}
+
+.add-board:hover {
+    background-color: #e67e00;
+    transform: scale(1.05); /* Slight zoom effect on hover */
+}
+
+::-webkit-scrollbar {
+    width: 0.1px;
+    background-color: transparent; /* Hides scrollbar */
+}
+
+    </style>
+</head>
+<body>
+    <div class="container mx-auto p-4">
+        <div class="header text-center mb-8">
+            <h1 class="text-4xl font-bold">Board Clip</h1>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="board-container">
+            <!-- Dynamic board content will appear here -->
+        </div>
+        <button class="add-board" onclick="addBoard()">
+            <i class="fas fa-plus"></i>
+        </button>
+    </div>
+
+    <script>
+        // Function to create a new board with max 16 characters per line and 7 lines
+        function addBoard() {
+            const container = document.querySelector('#board-container');
+            const newBoard = document.createElement('div');
+            newBoard.className = 'board';
+            const boardId = 'board-' + new Date().getTime(); // Generate a unique ID for the board
+            newBoard.dataset.boardId = boardId;
+
+            newBoard.innerHTML = `
+                <p contenteditable="true" oninput="limitText(this)" onkeydown="handleEnter(event, this)" placeholder="Type your text here..."></p>
+                <button class="delete-btn" onclick="deleteBoard('${boardId}')">
+                    <i class="fas fa-trash"></i>
+                </button>
+            `;
+            container.appendChild(newBoard);
+
+            // Save the new board to localStorage
+            saveBoards();
+        }
+
+        // Function to limit text to 16 characters per line and 7 lines
+        function limitText(element) {
+            let text = element.textContent;
+
+            // Split text into lines, ensuring each line is <= 16 characters
+            let lines = text.match(/.{1,16}/g) || [];
+
+            // Limit to 7 lines
+            if (lines.length > 7) {
+                lines = lines.slice(0, 7);
+            }
+
+            // Rejoin the lines back with new line breaks
+            element.textContent = lines.join('\n');
+            saveBoards();  // Save the board content after each change
+        }
+
+        // Function to handle Enter key for new lines
+        function handleEnter(event, element) {
+            if (event.key === 'Enter') {
+                event.preventDefault();  
+                const cursorPos = window.getSelection().getRangeAt(0);
+                cursorPos.deleteContents();
+                cursorPos.insertNode(document.createElement('br'));
+                saveBoards(); 
+            }
+        }
+
+        
+        function deleteBoard(boardId) {
+            if (confirm("Are you sure you want to delete this board?")) {
+                const board = document.querySelector(`[data-board-id='${boardId}']`);
+                if (board) {
+                    board.remove();
+                    saveBoards(); 
+                }
+            }
+        }
+
+        
+        function saveBoards() {
+            const boards = [];
+            const boardElements = document.querySelectorAll('.board');
+            boardElements.forEach(board => {
+                const boardData = {
+                    id: board.dataset.boardId,
+                    content: board.querySelector('p').textContent.trim() // Save textContent instead of innerHTML
+                };
+                boards.push(boardData);
+            });
+            localStorage.setItem('boards', JSON.stringify(boards));
+        }
+
+        
+        function loadBoards() {
+            const boards = JSON.parse(localStorage.getItem('boards')) || [];
+            const container = document.querySelector('#board-container');
+            boards.forEach(boardData => {
+                const board = document.createElement('div');
+                board.className = 'board';
+                board.dataset.boardId = boardData.id;
+                board.innerHTML = `
+                    <p contenteditable="true" oninput="limitText(this)" onkeydown="handleEnter(event, this)" placeholder="Type your text here...">${boardData.content}</p>
+                    <button class="delete-btn" onclick="deleteBoard('${boardData.id}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                `;
+                container.appendChild(board);
+            });
+        }
+
+        // Load boards when the page loads
+        window.onload = loadBoards;
+    </script>
+</body>
+</html>
