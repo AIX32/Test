@@ -613,18 +613,15 @@
       }
     });
     
-// Existing variable declaration
 const boardClipButton = document.getElementById('board-clip');
 const iframeModal = document.getElementById('iframe-modal');
 const modalIframe = document.getElementById('modal-iframe');
 
-// Function to open the iframe modal
 function openIframeModal() {
-  iframeModal.style.display = 'block';  // Show the iframe modal
+  iframeModal.style.display = 'block';
   modalIframe.src = 'https://raw.githack.com/AIX32/BloxdForge-Files/refs/heads/main/.github/BoardClip.html'; // Set the iframe URL to your desired content
 }
 
-// Event listener for the Board Clip button
 boardClipButton.addEventListener('click', openIframeModal);
 
 const closeIframeModal = () => {
@@ -633,18 +630,12 @@ const closeIframeModal = () => {
 };
 
 document.addEventListener('dblclick', (event) => {
-  if (event.button === 0) {  // Left mouse button (button 0)
+  if (event.button === 0) {
     closeIframeModal();
   }
 });
 
-
-
-
-
-
-
-    loadCoordinates();
+loadCoordinates();
   </script>
 </body>
 </html>

@@ -33,11 +33,11 @@ body {
     white-space: pre-wrap;
     margin-bottom: 1rem;
     position: relative;
-    transition: all 0.3s ease; /* Smooth transition for all properties */
+    transition: all 0.3s ease;
 }
 
 .board:hover {
-    transform: scale(1.02); /* Slight zoom effect on hover */
+    transform: scale(1.02);
 }
 
 .board p {
@@ -54,7 +54,7 @@ body {
     outline: none;
     overflow-y: auto;
     max-height: 120px;
-    transition: max-height 0.3s ease; /* Smooth transition for height */
+    transition: max-height 0.3s ease;
 }
 
 .delete-btn {
@@ -75,12 +75,12 @@ body {
     cursor: pointer;
     border: none;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transition */
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .delete-btn:hover {
     background-color: #c0392b;
-    transform: scale(1.1); /* Slight scaling effect on hover */
+    transform: scale(1.1);
 }
 
 .add-board {
@@ -95,18 +95,18 @@ body {
     align-items: center;
     justify-content: center;
     font-size: 1.5rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Light shadow for depth */
-    transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transition */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .add-board:hover {
     background-color: #e67e00;
-    transform: scale(1.05); /* Slight zoom effect on hover */
+    transform: scale(1.05);
 }
 
 ::-webkit-scrollbar {
     width: 0.1px;
-    background-color: transparent; /* Hides scrollbar */
+    background-color: transparent;
 }
 
     </style>
@@ -126,12 +126,11 @@ body {
     </div>
 
     <script>
-        // Function to create a new board with max 16 characters per line and 7 lines
         function addBoard() {
             const container = document.querySelector('#board-container');
             const newBoard = document.createElement('div');
             newBoard.className = 'board';
-            const boardId = 'board-' + new Date().getTime(); // Generate a unique ID for the board
+            const boardId = 'board-' + new Date().getTime();
             newBoard.dataset.boardId = boardId;
 
             newBoard.innerHTML = `
@@ -142,28 +141,22 @@ body {
             `;
             container.appendChild(newBoard);
 
-            // Save the new board to localStorage
             saveBoards();
         }
 
-        // Function to limit text to 16 characters per line and 7 lines
         function limitText(element) {
             let text = element.textContent;
 
-            // Split text into lines, ensuring each line is <= 16 characters
             let lines = text.match(/.{1,16}/g) || [];
 
-            // Limit to 7 lines
             if (lines.length > 7) {
                 lines = lines.slice(0, 7);
             }
 
-            // Rejoin the lines back with new line breaks
             element.textContent = lines.join('\n');
-            saveBoards();  // Save the board content after each change
+            saveBoards();
         }
 
-        // Function to handle Enter key for new lines
         function handleEnter(event, element) {
             if (event.key === 'Enter') {
                 event.preventDefault();  
@@ -192,7 +185,7 @@ body {
             boardElements.forEach(board => {
                 const boardData = {
                     id: board.dataset.boardId,
-                    content: board.querySelector('p').textContent.trim() // Save textContent instead of innerHTML
+                    content: board.querySelector('p').textContent.trim()
                 };
                 boards.push(boardData);
             });
@@ -217,7 +210,6 @@ body {
             });
         }
 
-        // Load boards when the page loads
         window.onload = loadBoards;
     </script>
 </body>
